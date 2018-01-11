@@ -1,13 +1,17 @@
 import React from 'react';
 import {Shape} from './shape';
-
+const styles={
+  text:{
+    userSelect:"none"
+  }
+}
 export class TextBox extends Shape{
   constructor(props) {
     super(props);
   }
   ovrInner() {
     return (
-      <span>{this.props.text}</span>
+      <span style={styles.text}>{this.props.text}</span>
     );
   }  
   ovrExtraStyle(){
