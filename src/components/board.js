@@ -1,124 +1,181 @@
-import React from 'react';
-import { Shape } from './shape';
-import { Circle } from './circle';
-import { TextBox } from './textbox';
-import { Icon } from './icon';
+import React from "react";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import FloatingActionButton from "material-ui/FloatingActionButton";
+
+import { ShapeDynamic } from "./shapes/shape-dynamic";
+import { Shape } from "./shapes/shape";
 
 const styles = {
-  header:{
-
-  },
-  controls:{
-    position:"absolute"
-  },
-  title:{
-
-  },
-  drawing:{
-    background:"#ededed",
-    width:"100%",
-    height:"calc(100vh - 100px)"
-    
+  drawing: {
+    background: "#ededed",
+    width: "100%",
+    height: "calc(100vh - 30px)"
   }
 };
 
-export class Board extends React.Component{
+export class Board extends React.Component {
   controls: Shape[] = [];
-  currentControl: Shape;
+  draggingShape: Shape;
 
-  constructor(props){
+  list = [
+    {
+      id: 1,
+      type: "Triangle",
+      color: "#333",
+      width: 150,
+      height: 50,
+      x: 50,
+      y: 100,
+      selected: true, 
+      strokeColor: "#00ff00",
+      strokeWidth: 10
+    },
+    {
+      id: 2,
+      type: "Star",
+      color: "#333",
+      width: 150,
+      height: 50,
+      x: 50,
+      y: 300,
+      selected: true,
+      strokeColor: "#00ff00",
+      strokeWidth: 4
+    },    
+    {
+      id: 3,
+      type: "Rectangle",
+      color: "#ff0000",
+      width: 150,
+      height: 50,
+      x: 50,
+      y: 400,
+      selected: true,
+      strokeColor:"#00ff00",
+      strokeWidth:10
+    },  
+    // {
+    //   id: 1,
+    //   type: "Line",
+    //   color: "#333",
+    //   width: 150,
+    //   height: 50,
+    //   x: 50,
+    //   y: 300,
+    //   selected: true
+    // },    
+    // {
+        //   id: 1,
+        //   type: "Shape",
+        //   background: "#445566",
+        //   color:"#333",
+        //   width: 50,
+        //   height: 50,
+        //   x: 100,
+        //   y: 100
+        // },
+        // {
+        //   id: 2,
+        //   type: "Circle",
+        //   background: "#3d3d3d",
+        //   color: "#333",
+        //   width: 20,
+        //   height: 20,
+        //   x: 200,
+        //   y: 200
+        // },
+        // {
+        //   id: 3,
+        //   type: "TextBox",
+        //   background: "#ffffff",
+        //   color: "#333",
+        //   width: 150,
+        //   height: 50,
+        //   x: 50,
+        //   y: 300,
+        //   text: "hello",
+        //   selected: true
+        // }
+  ];
+
+  constructor(props) {
     super(props);
     this.state = {
-      shapes:[
-        { id: 1, type: "Shape", color:"#445566", width: 50, height: 50, x: 100, y: 100 },
-        { id: 2, type: "Circle", color: "#3d3d3d", width: 20, height: 20, x: 200, y: 200 },
-        { id: 3, type: "TextBox", color: "#ffffff", width: 150, height: 50, x: 50, y: 300, text: "hello", selected:true }
-      ]
-    }
+      shapes: this.list
+    };
+
+    if (this.props.onInit) this.props.onInit(this);
   }
-  mousemove(e){
-    if (this.currentControl){
-      this.currentControl.mousemoveOutside(e);
+  selectedShape() {
+    for (let shape of this.controls) {
+      if (shape.isSelected()) return shape;
+    }
+    return null;
+  }
+  mousemove(e) {
+    if (this.draggingShape) {
+      this.draggingShape.mousemoveOutside(e);
     }
   }
   mousedown(e) {
     for (let s of this.controls) {
       s.mousedownOutside(e);
     }
-  }  
+  }
   mouseup(e) {
-    for(let s of this.controls){
+    for (let s of this.controls) {
       s.mouseupOutside(e);
     }
   }
 
-  initShape(shape){
+  initShape(shape) {
     this.controls.push(shape);
     console.log("All shapes:", this.controls);
   }
 
-  dragShape(shape){
+  dragShape(shape) {
     console.log("On drag:", shape);
-    this.currentControl = shape;
+    this.draggingShape = shape;
   }
 
   dropShape(shape) {
     console.log("On drop:", shape);
-    this.currentControl = null;
+    this.draggingShape = null;
   }
 
-  renderShape(shape){
-    if (shape.type === "Shape")
-      return (
-        <Shape key={shape.id} onInit={this.initShape.bind(this)} onDrag={this.dragShape.bind(this)} onDrop={this.dropShape.bind(this)} data={shape}></Shape>
-      );
-    if (shape.type === "Circle")
-      return (
-        <Circle key={shape.id} onInit={this.initShape.bind(this)} onDrag={this.dragShape.bind(this)} onDrop={this.dropShape.bind(this)} data={shape}></Circle>
-      );
-    if (shape.type === "TextBox")
-      return (
-        <TextBox key={shape.id} onInit={this.initShape.bind(this)} onDrag={this.dragShape.bind(this)} onDrop={this.dropShape.bind(this)} text={shape.text} data={shape}></TextBox>
-      );     
-    if (shape.type === "Icon")
-      return (
-        <Icon key={shape.id} onInit={this.initShape.bind(this)} onDrag={this.dragShape.bind(this)} onDrop={this.dropShape.bind(this)} text={shape.text} data={shape}></Icon>
-      );           
+  shapeSelected(shape) {
+    if (this.props.onShapeSelected) this.props.onShapeSelected(shape);
   }
 
-  addShape(shape){
-    let shapes = this.state.shapes;
-    shape.id = shapes.length + 1;    
-    shapes.push(shape);
-    this.setState({ shapes: shapes });
-  }
-  addCircle(){
-    let circle = {type: "Circle", color: "#3d3d3d", width: 50, height: 50, x: 0, y: 0 };
-    this.addShape(circle);
-  }
-  addRect() {
-    let rect = { type: "Shape", color: "#3d3d3d", width: 50, height: 50, x: 0, y: 0 };
-    this.addShape(rect);
-  }
-
-  render(){
+  renderShape(shape) {
     return (
-      <div>
-        <div style={styles.header}>
-          <div style={styles.controls}>
-            <button onClick={this.addCircle.bind(this)}>+Circle</button>
-            <button onClick={this.addRect.bind(this)}>+Rect</button>
-          </div>
-          <div style={styles.title}>Board</div>
-        </div>
-        <div style={styles.drawing}
-          onMouseDown={this.mousedown.bind(this)}        
-          onMouseMove={this.mousemove.bind(this)}
-          onMouseUp={this.mouseup.bind(this)}
-          >
-          {this.state.shapes.map(shape=>this.renderShape(shape))} 
-          
-        </div>
+      <ShapeDynamic
+        key={shape.id}
+        onInit={this.initShape.bind(this)}
+        onDrag={this.dragShape.bind(this)}
+        onDrop={this.dropShape.bind(this)}
+        onSelected={this.shapeSelected.bind(this)}
+        shape={shape}
+      />
+    );
+  }
+
+  addShape(shape) {
+    shape.id = this.list.length + 1;
+    this.list.push(shape);
+    this.setState({ shapes: this.list });
+  }
+
+  render() {
+    return (
+      <div
+        style={styles.drawing}
+        onMouseDown={this.mousedown.bind(this)}
+        onMouseMove={this.mousemove.bind(this)}
+        onMouseUp={this.mouseup.bind(this)}
+      >
+        {this.state.shapes.map(shape => this.renderShape(shape))}
         
       </div>
     );

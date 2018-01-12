@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shape } from './shape';
+import { Shape } from './../shape';
 
 export class Icon extends Shape {
   constructor(props) {

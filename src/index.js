@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {Board} from './components/board';
+import {Main} from './components/main';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const styles = {
   fontFamily: 'sans-serif',
@@ -8,9 +9,9 @@ const styles = {
 };
 
 const App = () => (
-  <div style={styles}>
-    <Board></Board>
-  </div>
+  <MuiThemeProvider>
+    <Main />
+  </MuiThemeProvider>
 );
 
-render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById('root')); 
