@@ -1,4 +1,6 @@
 import React from "react";
+import { BaseComponent } from "./../base-component";
+
 import { Helper } from "../../lib/Helper";
 import { ShapeStyleCollection } from "./shape-style";
 
@@ -14,6 +16,9 @@ const styles = {
     height: 5,
     background: "#3d3d3d",
     cursor: "crosshair"
+  },
+  inner:{
+    overflow:'hidden'
   },
   dot1: {
     top: -5,
@@ -33,7 +38,7 @@ const styles = {
   }
 };
 
-export class Shape extends React.Component {
+export class Shape extends BaseComponent {
   dots = [true, true, true, true];
   styleCollection: ShapeStyleCollection = new ShapeStyleCollection();
   target: any = null;
@@ -43,20 +48,20 @@ export class Shape extends React.Component {
 
   ovrDeclareStyle() {
     this.styleCollection.add("cursor", "default", null);
-    this.styleCollection.add("position", "absolute", null);
+    this.styleCollection.add("position", "absolute", null); 
 
-    this.styleCollection.add("width", this.props.data.width, null);
-    this.styleCollection.add("height", this.props.data.height, null);
-    this.styleCollection.add("top", this.props.data.y, null);
-    this.styleCollection.add("left", this.props.data.x, null);
+    this.styleCollection.add("width", this.props.data.style.width, null);
+    this.styleCollection.add("height", this.props.data.style.height, null);
+    this.styleCollection.add("top", this.props.data.style.y, null);
+    this.styleCollection.add("left", this.props.data.style.x, null);
 
-    this.styleCollection.add("color", this.props.data.color, "TextBox");
-    this.styleCollection.add(
+    this.styleCollection.add("color", this.props.data.style.color, "TextBox");
+    this.styleCollection.add( 
       "background",
-      this.props.data.background,
+      this.props.data.style.background,
       "TextBox"
     );
-    this.styleCollection.add("border", this.props.data.border, "TextBox");
+    this.styleCollection.add("border", this.props.data.style.border, "TextBox");
   }
 
   constructor(props) {
@@ -69,7 +74,6 @@ export class Shape extends React.Component {
       mousedownY: 0,
       style: this.styleCollection.output()
     };
-    if (this.props.onInit) this.props.onInit(this);
   }
 
   isSelected() {
@@ -167,12 +171,14 @@ export class Shape extends React.Component {
       mousedownX: nave.offsetX,
       mousedownY: nave.offsetY
     });
+    // this.select(nave.target === this.target);
+    
     if (this.props.onDrag) this.props.onDrag(this);
   }
   mouseup(e) {
     this.setState({ isMouseDown: false });
     if (this.props.onDrop) this.props.onDrop(this);
-  }
+  } 
   
   updateRect(x, y, w, h) {
     if (w <= 0) w = 2;
@@ -321,7 +327,9 @@ export class Shape extends React.Component {
         onMouseMove={this.mousemove.bind(this)}
       >
         <div>
-          {this.ovrInner()}
+          <div style={styles.inner}>
+            {this.ovrInner()}
+          </div>
           {this.state.isSelected && (
             <div style={styles.selected}>
               {this.dots[0] && (

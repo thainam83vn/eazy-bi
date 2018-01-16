@@ -3,10 +3,10 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import Drawer from "material-ui/Drawer";
-
+import { BaseComponent } from "./base-component";
 import { Board } from "./board";
 import { ShapeProperty } from "./shapes/shape-property";
-import { CustomLineChart } from "./charts/line-chart";
+import { SampleData } from "./../sample-data";
 
 const styles = {
   controls: {
@@ -16,37 +16,14 @@ const styles = {
   }
 };
 
-export class Main extends React.Component {
+export class Main extends BaseComponent {
   state = {
     shapePropertyOpen: false
   };
   board: Board;
   propView: ShapeProperty;
 
-  addCircle() {
-    let circle = {
-      type: "Circle",
-      background:"#3d3d3d",
-      color: "#3d3d3d",
-      width: 50,
-      height: 50,
-      x: 0,
-      y: 0
-    };
-    this.board.addShape(circle);
-  }
-  addRect() {
-    let rect = {
-      type: "Shape",
-      background: "#3d3d3d",
-      color: "#3d3d3d",
-      width: 50,
-      height: 50,
-      x: 0,
-      y: 0
-    };
-    this.board.addShape(rect);
-  } 
+  sample = new SampleData();
 
   initBoard(board) {
     this.board = board;
@@ -62,6 +39,10 @@ export class Main extends React.Component {
   boardSelection(selected) {
     console.log("Shape selected:", selected);
     this.propView.setShape(selected);
+  }
+
+  addShape(shape) {
+    this.board.addShape(shape);
   }
 
   render() {
@@ -90,14 +71,35 @@ export class Main extends React.Component {
           >
             <MenuItem
               primaryText="Rectangle"
-              onClick={this.addRect.bind(this)}
+              onClick={() => this.addShape(this.sample.addRect())}
             />
             <MenuItem
               primaryText="Circle"
-              onClick={this.addCircle.bind(this)}
+              onClick={() => this.addShape(this.sample.addCircle())}
             />
             <MenuItem primaryText="Icon" />
             <MenuItem primaryText="Text" />
+
+            <MenuItem
+              primaryText="Line Chart"
+              onClick={() => this.addShape(this.sample.addChart())}
+            />
+            <MenuItem
+              primaryText="Bar Chart"
+              onClick={() => this.addShape(this.sample.addBarChart())}
+            />
+            <MenuItem
+              primaryText="Area Chart"
+              onClick={() => this.addShape(this.sample.addAreaChart())}
+            />
+            <MenuItem
+              primaryText="Compose Chart"
+              onClick={() => this.addShape(this.sample.addComposeChart())}
+            />
+            <MenuItem
+              primaryText="Scatter Chart"
+              onClick={() => this.addShape(this.sample.addScatterChart())}
+            />
           </IconMenu>
           <FloatingActionButton
             mini={true}
@@ -106,7 +108,6 @@ export class Main extends React.Component {
             <i class="material-icons">mode_edit</i>
           </FloatingActionButton>
         </div>
-        
       </div>
     );
   }

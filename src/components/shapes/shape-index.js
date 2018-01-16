@@ -7,6 +7,8 @@ import { Triangle } from "./customs/triangle";
 import { Star } from "./customs/star";
 import { Rectangle } from "./customs/rectangle";
 
+import { ChartShape } from "./chart-shape";
+
 let components = {}
 //For each component in the config fiel into an object
 // for (var i = config.length - 1; i >= 0; i--) {
@@ -22,5 +24,7 @@ components.Line = Line;
 components.Triangle = Triangle;
 components.Star = Star;
 components.Rectangle = Rectangle;
+
+components.ChartShape = ChartShape;
 
 export default components

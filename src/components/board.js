@@ -2,9 +2,10 @@ import React from "react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-
+import { BaseComponent } from "./base-component";
 import { ShapeDynamic } from "./shapes/shape-dynamic";
 import { Shape } from "./shapes/shape";
+import { ChartShape } from "./shapes/chart-shape";
 
 const styles = {
   drawing: {
@@ -14,47 +15,49 @@ const styles = {
   }
 };
 
-export class Board extends React.Component {
+export class Board extends BaseComponent {
   controls: Shape[] = [];
   draggingShape: Shape;
 
   list = [
-    {
-      id: 1,
-      type: "Triangle",
-      color: "#333",
-      width: 150,
-      height: 50,
-      x: 50,
-      y: 100,
-      selected: true, 
-      strokeColor: "#00ff00",
-      strokeWidth: 10
-    },
-    {
-      id: 2,
-      type: "Star",
-      color: "#333",
-      width: 150,
-      height: 50,
-      x: 50,
-      y: 300,
-      selected: true,
-      strokeColor: "#00ff00",
-      strokeWidth: 4
-    },    
-    {
-      id: 3,
-      type: "Rectangle",
-      color: "#ff0000",
-      width: 150,
-      height: 50,
-      x: 50,
-      y: 400,
-      selected: true,
-      strokeColor:"#00ff00",
-      strokeWidth:10
-    },  
+    // {
+    //   id: 1,
+    //   type: "Triangle",
+    //   style: {
+    //     color: "#333",
+    //     width: 150,
+    //     height: 50,
+    //     x: 50,
+    //     y: 100,
+    //     selected: true,
+    //     strokeColor: "#00ff00",
+    //     strokeWidth: 10
+    //   }
+    // }
+    // {
+    //   id: 2,
+    //   type: "Star",
+    //   color: "#333",
+    //   width: 150,
+    //   height: 50,
+    //   x: 50,
+    //   y: 300,
+    //   selected: true,
+    //   strokeColor: "#00ff00",
+    //   strokeWidth: 4
+    // },
+    // {
+    //   id: 3,
+    //   type: "Rectangle",
+    //   color: "#ff0000",
+    //   width: 150,
+    //   height: 50,
+    //   x: 50,
+    //   y: 400,
+    //   selected: true,
+    //   strokeColor:"#00ff00",
+    //   strokeWidth:10
+    // },
     // {
     //   id: 1,
     //   type: "Line",
@@ -64,39 +67,39 @@ export class Board extends React.Component {
     //   x: 50,
     //   y: 300,
     //   selected: true
-    // },    
+    // },
     // {
-        //   id: 1,
-        //   type: "Shape",
-        //   background: "#445566",
-        //   color:"#333",
-        //   width: 50,
-        //   height: 50,
-        //   x: 100,
-        //   y: 100
-        // },
-        // {
-        //   id: 2,
-        //   type: "Circle",
-        //   background: "#3d3d3d",
-        //   color: "#333",
-        //   width: 20,
-        //   height: 20,
-        //   x: 200,
-        //   y: 200
-        // },
-        // {
-        //   id: 3,
-        //   type: "TextBox",
-        //   background: "#ffffff",
-        //   color: "#333",
-        //   width: 150,
-        //   height: 50,
-        //   x: 50,
-        //   y: 300,
-        //   text: "hello",
-        //   selected: true
-        // }
+    //   id: 1,
+    //   type: "Shape",
+    //   background: "#445566",
+    //   color:"#333",
+    //   width: 50,
+    //   height: 50,
+    //   x: 100,
+    //   y: 100
+    // },
+    // {
+    //   id: 2,
+    //   type: "Circle",
+    //   background: "#3d3d3d",
+    //   color: "#333",
+    //   width: 20,
+    //   height: 20,
+    //   x: 200,
+    //   y: 200
+    // },
+    // {
+    //   id: 3,
+    //   type: "TextBox",
+    //   background: "#ffffff",
+    //   color: "#333",
+    //   width: 150,
+    //   height: 50,
+    //   x: 50,
+    //   y: 300,
+    //   text: "hello",
+    //   selected: true
+    // }
   ];
 
   constructor(props) {
@@ -104,8 +107,6 @@ export class Board extends React.Component {
     this.state = {
       shapes: this.list
     };
-
-    if (this.props.onInit) this.props.onInit(this);
   }
   selectedShape() {
     for (let shape of this.controls) {
@@ -131,20 +132,27 @@ export class Board extends React.Component {
 
   initShape(shape) {
     this.controls.push(shape);
-    console.log("All shapes:", this.controls);
+    // console.log("All shapes:", this.controls);
   }
 
   dragShape(shape) {
-    console.log("On drag:", shape);
+    // console.log("On drag:", shape);
     this.draggingShape = shape;
   }
 
   dropShape(shape) {
-    console.log("On drop:", shape);
+    // console.log("On drop:", shape);
     this.draggingShape = null;
   }
 
   shapeSelected(shape) {
+    // console.log("selected:", shape, this.controls);
+    // for (let s of this.controls) {
+    //   console.log("compare:", shape, s);
+      
+    //   if (s !== shape)
+    //     s.select(false);
+    // }
     if (this.props.onShapeSelected) this.props.onShapeSelected(shape);
   }
 
@@ -176,7 +184,6 @@ export class Board extends React.Component {
         onMouseUp={this.mouseup.bind(this)}
       >
         {this.state.shapes.map(shape => this.renderShape(shape))}
-        
       </div>
     );
   }

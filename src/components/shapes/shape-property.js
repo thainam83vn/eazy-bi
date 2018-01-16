@@ -1,9 +1,10 @@
 import React from "react";
 import TextField from "material-ui/TextField";
+import { BaseComponent } from "./../base-component";
 import { Helper } from "./../../lib/Helper";
 import { Shape } from "./shape";
 
-export class ShapeProperty extends React.Component {
+export class ShapeProperty extends BaseComponent {
   shape: Shape;
   state = {
     styles: []
@@ -12,7 +13,6 @@ export class ShapeProperty extends React.Component {
 
   constructor(props) {
     super(props);
-    if (this.props.onInit) this.props.onInit(this);
   }
   setShape(shape) {
     this.round++;

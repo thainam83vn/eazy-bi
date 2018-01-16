@@ -1,4 +1,5 @@
 import React from "react";
+import { BaseComponent } from "./../base-component";
 import components from './shape-index';
 
 export class ShapeDynamic extends React.Component {
@@ -25,7 +26,7 @@ export class ShapeDynamic extends React.Component {
         onDrop={this.dropShape.bind(this)}
         onSelected={this.selected.bind(this)}
         data={shape} />
-    }
+    } 
     return null;
   }
 }

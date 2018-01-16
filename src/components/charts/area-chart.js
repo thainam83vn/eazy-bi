@@ -1,19 +1,18 @@
 import React from "react";
 import { BaseChart } from "./chart";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
-  Legend
+  Tooltip
 } from "recharts";
 
-export class PanLineChart extends BaseChart {
+export class PanAreaChart extends BaseChart {
   render() {
     return (
-      <LineChart
+      <AreaChart
         width={this.state.attributes.width}
         height={this.state.attributes.height}
         data={this.state.data}
@@ -23,11 +22,10 @@ export class PanLineChart extends BaseChart {
         <YAxis />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
-        <Legend />
         {this.state.attributes.YAxis.map(yaxis => (
-          <Line type="monotone" dataKey={yaxis.dataKey} stroke={yaxis.stroke} />
+          <Area type="monotone" dataKey={yaxis.dataKey} stroke={yaxis.stroke} fill={yaxis.fill} />
         ))}
-      </LineChart>
+      </AreaChart>
     );
   }
 }
