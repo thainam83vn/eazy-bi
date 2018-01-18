@@ -13,14 +13,21 @@ const styles = {
 };
 
 export class ChartShape extends Shape {
+  chartData = null;
   chart: BaseChart;
   constructor(props) {
     super(props);
-
+    this.chartData = this.props.data.chart;
     this.props.data.chart.attributes.width = this.props.data.style.width;
     this.props.data.chart.attributes.height = this.props.data.style.height;
     // this.setState({ loading: false });
     this.state.loading = false;
+  }
+
+  data(){
+    let r = super.data();
+    r.chart = this.chartData;
+    return r;
   }
 
   initChart(chart) {

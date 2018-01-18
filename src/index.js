@@ -1,11 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
+import './style.css';
 import {Main} from './components/main';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const styles = {
   fontFamily: 'sans-serif',
   textAlign: 'center',
+  padding:"0px"
 };
 
 const App = () => (

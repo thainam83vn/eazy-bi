@@ -2,43 +2,79 @@ import React from "react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import Drawer from "material-ui/Drawer";
 import { BaseComponent } from "./base-component";
-import { Board } from "./board";
-import { ShapeProperty } from "./shapes/shape-property";
-import { SampleData } from "./../sample-data";
+import { DatabaseBoard } from "./database/database-board";
+import { DesignBoard } from "./board";
 
 const styles = {
   controls: {
     position: "absolute",
-    bottom: 0,
+    bottom: 10,
     left: 0
+  },
+  toolbar: {
+    display: "inline-block"
   }
 };
 
 export class Main extends BaseComponent {
   state = {
-    shapePropertyOpen: false
+    screen: "Database"
   };
-  board: Board;
-  propView: ShapeProperty;
+  board: DesignBoard;
+  boardData = [];
 
-  sample = new SampleData();
+  dbboard: DatabaseBoard;
 
-  initBoard(board) {
-    this.board = board;
+  renderScreen() {
+    if (this.state.screen === "Design") {
+      return (
+        <DesignBoard
+          onInit={e => this.ovrInitChild("board", e)}
+          data={this.boardData}
+        />
+      );
+    } else {
+      return <DatabaseBoard onInit={e => this.ovrInitChild("dbboard", e)} />;
+    }
   }
-  initProperty(propView) {
-    this.propView = propView;
+
+  renderScreenMenu() {
+    return (
+      <IconMenu
+        iconButtonElement={
+          <FloatingActionButton mini={true}>
+            {this.state.screen === "Design" && (
+              <i class="material-icons">insert_chart</i>
+            )}
+            {this.state.screen === "Database" && (
+              <i class="material-icons">storage</i>
+            )}
+          </FloatingActionButton>
+        }
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
+      >
+        <MenuItem
+          primaryText="Design"
+          onClick={() => this.switchTo("Design")}
+        />
+        <MenuItem
+          primaryText="Database"
+          onClick={() => this.switchTo("Database")}
+        />
+      </IconMenu>
+    );
   }
 
-  showProperty() {
-    this.setState({ shapePropertyOpen: !this.state.shapePropertyOpen });
-  }
-
-  boardSelection(selected) {
-    console.log("Shape selected:", selected);
-    this.propView.setShape(selected);
+  switchTo(mode) {
+    if (this.state.mode !== mode) {
+      if (mode !== "Design") {
+        this.boardData = this.board.data();
+        console.log("Board data:", this.boardData);
+      }
+      this.setState({ screen: mode });
+    }
   }
 
   addShape(shape) {
@@ -48,66 +84,8 @@ export class Main extends BaseComponent {
   render() {
     return (
       <div>
-        <Drawer
-          open={this.state.shapePropertyOpen}
-          docked={true}
-          openSecondary={true}
-        >
-          <ShapeProperty onInit={this.initProperty.bind(this)} />
-        </Drawer>
-        <Board
-          onInit={this.initBoard.bind(this)}
-          onShapeSelected={this.boardSelection.bind(this)}
-        />
-        <div style={styles.controls}>
-          <IconMenu
-            iconButtonElement={
-              <FloatingActionButton mini={true}>
-                <i class="material-icons">add</i>
-              </FloatingActionButton>
-            }
-            anchorOrigin={{ horizontal: "left", vertical: "top" }}
-            targetOrigin={{ horizontal: "left", vertical: "top" }}
-          >
-            <MenuItem
-              primaryText="Rectangle"
-              onClick={() => this.addShape(this.sample.addRect())}
-            />
-            <MenuItem
-              primaryText="Circle"
-              onClick={() => this.addShape(this.sample.addCircle())}
-            />
-            <MenuItem primaryText="Icon" />
-            <MenuItem primaryText="Text" />
-
-            <MenuItem
-              primaryText="Line Chart"
-              onClick={() => this.addShape(this.sample.addChart())}
-            />
-            <MenuItem
-              primaryText="Bar Chart"
-              onClick={() => this.addShape(this.sample.addBarChart())}
-            />
-            <MenuItem
-              primaryText="Area Chart"
-              onClick={() => this.addShape(this.sample.addAreaChart())}
-            />
-            <MenuItem
-              primaryText="Compose Chart"
-              onClick={() => this.addShape(this.sample.addComposeChart())}
-            />
-            <MenuItem
-              primaryText="Scatter Chart"
-              onClick={() => this.addShape(this.sample.addScatterChart())}
-            />
-          </IconMenu>
-          <FloatingActionButton
-            mini={true}
-            onClick={this.showProperty.bind(this)}
-          >
-            <i class="material-icons">mode_edit</i>
-          </FloatingActionButton>
-        </div>
+        {this.renderScreen()}
+        <div style={styles.controls}>{this.renderScreenMenu()}</div>
       </div>
     );
   }

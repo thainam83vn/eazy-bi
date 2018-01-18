@@ -39,6 +39,9 @@ const styles = {
 };
 
 export class Shape extends BaseComponent {
+  shapeId = null;  
+  shapeType = null;
+
   dots = [true, true, true, true];
   styleCollection: ShapeStyleCollection = new ShapeStyleCollection();
   target: any = null;
@@ -52,8 +55,8 @@ export class Shape extends BaseComponent {
 
     this.styleCollection.add("width", this.props.data.style.width, null);
     this.styleCollection.add("height", this.props.data.style.height, null);
-    this.styleCollection.add("top", this.props.data.style.y, null);
-    this.styleCollection.add("left", this.props.data.style.x, null);
+    this.styleCollection.add("top", this.props.data.style.top, null);
+    this.styleCollection.add("left", this.props.data.style.left, null);
 
     this.styleCollection.add("color", this.props.data.style.color, "TextBox");
     this.styleCollection.add( 
@@ -66,13 +69,25 @@ export class Shape extends BaseComponent {
 
   constructor(props) {
     super(props);
+    this.shapeType = this.props.data.type;
+    this.shapeId = this.props.data.id;
     this.ovrDeclareStyle();
+    
     this.state = {
       isSelected: this.props.data.selected ? this.props.data.selected : false,
       isMouseDown: false,
       mousedownX: 0,
       mousedownY: 0,
       style: this.styleCollection.output()
+    };
+  }
+
+  data(){
+    let style = this.styleCollection.output();
+    return {
+      id: this.shapeId,
+      type: this.shapeType,
+      style:style,
     };
   }
 

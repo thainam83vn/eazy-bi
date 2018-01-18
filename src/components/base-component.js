@@ -6,4 +6,14 @@ export class BaseComponent extends React.Component {
     if (this.props.onInit)
       this.props.onInit(this);
   }
+
+  ovrInitChild(name, child){
+    this[name] = child;
+  }
+
+  changeState(p){
+    this.setState((prev, props)=>{
+
+    });
+  }
 }
