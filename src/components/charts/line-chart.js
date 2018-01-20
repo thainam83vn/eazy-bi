@@ -11,6 +11,15 @@ import {
 } from "recharts";
 
 export class PanLineChart extends BaseChart {
+  declares(){
+    return {
+      datasourceName: 'ControlDatasourceSelector',      
+      XAxis: 'ControlDataFieldSelector',
+      YAxis: [
+        { dataKey: "ControlDataFieldSelector", stroke: "ControlColorSelector" },
+      ],
+    };
+  }
   render() {
     return (
       <LineChart
@@ -25,7 +34,7 @@ export class PanLineChart extends BaseChart {
         <Tooltip />
         <Legend />
         {this.state.attributes.YAxis.map(yaxis => (
-          <Line type="monotone" dataKey={yaxis.dataKey} stroke={yaxis.stroke} />
+          <Line type="monotone" key={ yaxis.dataKey } dataKey={yaxis.dataKey} stroke={yaxis.stroke} />
         ))}
       </LineChart>
     );

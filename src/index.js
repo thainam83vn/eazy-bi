@@ -1,7 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import './style.css';
-import {Main} from './components/main';
+import { Main } from './components/main';
+import { TestProperty} from './components/test-property';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const styles = {
@@ -12,7 +13,7 @@ const styles = {
 
 const App = () => (
   <MuiThemeProvider>
-    <Main />
+    <Main  />
   </MuiThemeProvider>
 );
 

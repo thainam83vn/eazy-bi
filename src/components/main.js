@@ -5,6 +5,9 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import { BaseComponent } from "./base-component";
 import { DatabaseBoard } from "./database/database-board";
 import { DesignBoard } from "./board";
+import { SampleData } from "./../sample-data";
+import { Datasource} from "./../base/datasource-model";
+import { DatasourceService} from './../services/datasource-service';
 
 const styles = {
   controls: {
@@ -17,25 +20,50 @@ const styles = {
   }
 };
 
+const sample = new SampleData();
+
 export class Main extends BaseComponent {
   state = {
-    screen: "Database"
+    screen: "Design"
   };
-  board: DesignBoard;
+  viewDesign: DesignBoard;
   boardData = [];
 
-  dbboard: DatabaseBoard;
+  viewDatabase: DatabaseBoard;
+  datasources = [
+    new Datasource(sample.datasourceSampleCSV1("ds1")),
+    new Datasource(sample.datasourceSampleCSV2("ds2")),
+    new Datasource(sample.datasourceSampleCSV3("ds3"))
+  ];
+
+  constructor(props){
+    super(props);
+    for(let ds of this.datasources){
+      DatasourceService.instance().getDatasource(ds.name, ds);
+    }
+  }
+
+  datasourceChanged(ds) {
+    this.datasources = ds;
+    this.viewDesign.setDatasources(this.datasources);
+  }
 
   renderScreen() {
     if (this.state.screen === "Design") {
       return (
         <DesignBoard
-          onInit={e => this.ovrInitChild("board", e)}
+          onInit={e => this.ovrInitChild("viewDesign", e)}
           data={this.boardData}
         />
       );
     } else {
-      return <DatabaseBoard onInit={e => this.ovrInitChild("dbboard", e)} />;
+      return (
+        <DatabaseBoard
+          datasources={this.datasources}
+          onInit={e => this.ovrInitChild("viewDatabase", e)}
+          onChange={this.datasourceChanged.bind(this)}
+        />
+      );
     }
   }
 
@@ -68,9 +96,9 @@ export class Main extends BaseComponent {
   }
 
   switchTo(mode) {
-    if (this.state.mode !== mode) {
+    if (this.state.screen !== mode) {
       if (mode !== "Design") {
-        this.boardData = this.board.data();
+        this.boardData = this.viewDesign.data();
         console.log("Board data:", this.boardData);
       }
       this.setState({ screen: mode });
@@ -78,7 +106,7 @@ export class Main extends BaseComponent {
   }
 
   addShape(shape) {
-    this.board.addShape(shape);
+    this.viewDesign.addShape(shape);
   }
 
   render() {

@@ -2,13 +2,14 @@ import React from "react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import FlatButton from 'material-ui/FlatButton';
-import { List, ListItem } from 'material-ui/List';
+import FlatButton from "material-ui/FlatButton";
+import { List, ListItem } from "material-ui/List";
 import { BaseComponent } from "./../base-component";
 import { DatasourceView } from "./datasource-view";
 import { Datasource } from "./../../base/datasource-model";
 import { DialogService } from "./../../services/dialog-service";
-import { SampleData } from './../../sample-data';
+import { SampleData } from "./../../sample-data";
+import { DatasourceService } from "./../../services/datasource-service";
 
 const styles = {
   main: {
@@ -41,23 +42,33 @@ const styles = {
 const sample = new SampleData();
 
 export class DatabaseBoard extends BaseComponent {
-  state = {
-    datasources: []
-  };
-
-  datasourceView: DatasourceView;
-
+  viewDatasource: DatasourceView;
 
   constructor(props) {
     super(props);
-    this.datasources = this.props.datasources;
-    if (!this.datasources) this.datasources = [];
+    for (let ds of this.props.datasources) {
+      DatasourceService.instance().getDatasource(ds.name, ds);
+    }
+    this.state = {
+      datasourceNames: DatasourceService.instance().getDatasourceNames()
+    };
   }
-  selectDatasource(d){
-    this.datasourceView.setDatasource(null);
-    setTimeout(()=>{
-      this.datasourceView.setDatasource(d);
+  setStateDatasourceNames(){
+    let names = DatasourceService.instance().getDatasourceNames();
+    this.setState({
+      datasourceNames: names
+    });
+  }
+  selectDatasource(name) {
+    this.viewDatasource.setDatasource(null);
+    setTimeout(() => {
+      let proxyData = DatasourceService.instance().getDatasource(name);
+      this.viewDatasource.setDatasource(proxyData);
     }, 100);
+  }
+  addDatasource(ds) {
+    DatasourceService.instance().getDatasource(ds.name, ds);
+    this.setStateDatasourceNames();
   }
   addSource() {
     DialogService.instance().prompt(
@@ -66,14 +77,8 @@ export class DatabaseBoard extends BaseComponent {
       "",
       res => {
         if (res) {
-          this.setState((prevState, props) => {
-            let newds = prevState.datasources;
-            newds.push(new Datasource(sample.datasourceSampleCSV1(res)));
-            console.log("Datasources:", newds);
-            return {
-              datasources: newds
-            };
-          });
+          let newds = new Datasource(sample.datasourceSampleCSV1(res));
+          this.addDatasource(newds);
         }
       }
     );
@@ -98,20 +103,24 @@ export class DatabaseBoard extends BaseComponent {
   render() {
     return (
       <div>
-        <div style={styles.main}> 
+        <div style={styles.main}>
           <div style={styles.nav}>
             <List>
-              {this.state.datasources.map(d =>
-                <ListItem primaryText={d.name} onClick={() => this.selectDatasource(d)}/>
-              )}
+              {this.state.datasourceNames.map(d => (
+                <ListItem key={d}
+                  primaryText={d}
+                  onClick={() => this.selectDatasource(d)}
+                />
+              ))}
             </List>
-          
           </div>
           <div style={styles.content}>
-            <DatasourceView onInit={(e) => this.ovrInitChild("datasourceView", e)} />
+            <DatasourceView
+              onInit={e => this.ovrInitChild("viewDatasource", e)}
+            />
           </div>
         </div>
-        <div style={styles.footer}>{this.renderToolbar()}</div> 
+        <div style={styles.footer}>{this.renderToolbar()}</div>
       </div>
     );
   }

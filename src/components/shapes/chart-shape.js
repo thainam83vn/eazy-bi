@@ -44,6 +44,16 @@ export class ChartShape extends Shape {
     this.refreshChart();
   }
 
+  setChartData(chartData){
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.props.data.chart.attributes = chartData;
+      console.log("updateChartData:", this.props.data.chart);
+      
+      this.setState({ loading: false });
+    }, 200);
+  }
+
   refreshChart() {
     if (this.state.loading) {
       if (this.state.isMouseDown) {
@@ -76,8 +86,7 @@ export class ChartShape extends Shape {
           <ChartDynamic
             onInit={this.initChart.bind(this)}
             type={this.props.data.chart.type}
-            data={this.props.data.chart.data}
-            attributes={this.props.data.chart.attributes}
+            chart={this.props.data.chart}
           />
         )}
       </div>

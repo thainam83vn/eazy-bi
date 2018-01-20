@@ -1,13 +1,25 @@
 import React from "react";
+
 import { BaseComponent } from "./../base-component";
 import { Uploader } from "./../commons/uploader";
 
-import { Datasource } from "./../../base/datasource-model";
-
 export class CsvSetting extends BaseComponent {
-  render(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      csv: this.props.csv
+    }
+  }
+  uploaded(csvStr) {
+    this.setState({csv:csvStr});
+    if (this.props.onChange) this.props.onChange(csvStr);
+  }
+  render() {
     return (
-      <Uploader />
+      <div>
+        <Uploader onUploaded={this.uploaded.bind(this)} />
+        {this.state.csv}
+      </div>
     );
   }
 }

@@ -10,23 +10,67 @@ const data = [
 
 export class SampleData {
   datasourceSampleCSV1(name){
-    return {
-      name : name,
-      setting : {
-        type: 'csv',
-        fileName: 'f1.csv',
-        content: `
-        year,boys,girls
+    let c = `year,boys,girls
         1629,5218,4683
         1630,4858,4457
         1631,4422,4102
         1632,4994,4590
         1633,5158,4839
-        `,
+        `;
+    return {
+      name : name,
+      setting : {
+        type: 'csv',
+        fileName: 'f1.csv',
+        fileContent: c,
         desc: 'Datasource Sample CSV 1'
       }
     }
   }
+
+  datasourceSampleCSV2(name) {
+    let c = `name,uv,pv,amt
+        Page A,4000,2400,2400
+        Page B,3000,1398,2210
+        Page C,2000,9800,2290
+        Page D,2780,3908,2000
+        Page E,1890,4800,2181
+        Page F,2390,3800,2500
+        Page G,3490,4300,2100
+        `;
+    return {
+      name: name,
+      setting: {
+        type: 'csv',
+        fileName: 'f2.csv',
+        fileContent: c,
+        desc: 'Datasource Sample CSV 2'
+      }
+    }
+  }  
+
+  datasourceSampleCSV3(name) {
+    let c = `x,y
+        1,2
+        3,2
+        3,1
+        5,3
+        1,4
+        5,6
+        7,8
+        8,9
+        `;
+    return {
+      name: name,
+      setting: {
+        type: 'csv',
+        fileName: 'f3.csv',
+        fileContent: c,
+        desc: 'Datasource Sample CSV 3'
+      }
+    }
+  }  
+
 
   shapeList() {
     return [
@@ -155,11 +199,11 @@ export class SampleData {
         attributes: {
           XAxis: "name",
           YAxis: [
-            { dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
-            { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
-          ]
-        },
-        data: data
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
+          ],
+          datasourceName: "ds2"          
+        }
       }
     };
   }
@@ -182,9 +226,10 @@ export class SampleData {
           YAxis: [
             { dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
-          ]
+          ],
+          datasourceName: "ds2"  
+          
         },
-        data: data
       }
     };
   }
@@ -207,9 +252,10 @@ export class SampleData {
           YAxis: [
             { dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
-          ]
+          ],
+          datasourceName: "ds2"  
+          
         },
-        data: data
       }
     };
   }
@@ -233,9 +279,10 @@ export class SampleData {
             { type: "Line", dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
             { type: "Bar", dataKey: "uv", fill: "#00ff00", stroke: "#00ff00" },
             { type: "Area", dataKey: "uv", fill: "#0000ff", stroke: "#0000ff" }
-          ]
+          ],
+          datasourceName: "ds2"  
+          
         },
-        data: data
       }
     };
   }
@@ -254,16 +301,10 @@ export class SampleData {
         type: "PanScatterChart",
         attributes: {
           XAxis: "x",
-          YAxis: "y"
+          YAxis: "y",
+          datasourceName: "ds3"  
+          
         },
-        data: [
-          { x: 100, y: 200, z: 200 },
-          { x: 120, y: 100, z: 260 },
-          { x: 170, y: 300, z: 400 },
-          { x: 140, y: 250, z: 280 },
-          { x: 150, y: 400, z: 500 },
-          { x: 110, y: 280, z: 200 }
-        ]
       }
     };
   }

@@ -16,12 +16,18 @@ export class Helper {
     }
     return r;
   }
+  static asArrayWithKey(obj, keyField, valueField) {
+    let r = [];
+    for (let k in obj) {
+      r.push({ [keyField]: k, [valueField]: obj[k] });
+    }
+    return r;
+  }
   static predict(arr, predict) {
     let r = [];
     for (let o of arr) {
-      if (predict(o))
-        r.push(o);
+      if (predict(o)) r.push(o);
     }
     return r;
-  }  
+  }
 }

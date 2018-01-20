@@ -8,6 +8,8 @@ import { ShapeDynamic } from "./shapes/shape-dynamic";
 import { Shape } from "./shapes/shape";
 import { SampleData } from "./../sample-data";
 import { ShapeProperty } from "./shapes/shape-property";
+import { ChartProperty } from "./charts/chart-property";
+import { ProxyData } from "./../base/proxy-data";
 
 const styles = {
   drawing: {
@@ -26,10 +28,15 @@ const styles = {
 };
 
 export class DesignBoard extends BaseComponent {
+  propShapeView: ShapeProperty;
+  propChartView: ChartProperty;
+
   controls: Shape[] = [];
   draggingShape: Shape;
   sample = new SampleData();
-  propView: ShapeProperty;
+  selectedShape: Shape;
+
+  datasources: ProxyData[];
 
   list = [];
 
@@ -38,9 +45,14 @@ export class DesignBoard extends BaseComponent {
     this.list = this.props.data;
     this.state = {
       shapes: this.list,
-      shapePropertyOpen: false
+      openProperty: false,
+      propertyMode: 1
     };
   }
+  setDatasources(ds) {
+    this.setState({ datasources: ds });
+  }
+
   data() {
     let r = [];
     for (let c of this.controls) {
@@ -86,7 +98,7 @@ export class DesignBoard extends BaseComponent {
   }
 
   shapeSelected(shape) {
-    if (this.propView) this.propView.setShape(shape);
+    this.selectedShape = shape;
     if (this.props.onShapeSelected) this.props.onShapeSelected(shape);
   }
 
@@ -96,9 +108,31 @@ export class DesignBoard extends BaseComponent {
     this.setState({ shapes: this.list });
   }
 
-  showProperty() {
-    this.setState({ shapePropertyOpen: !this.state.shapePropertyOpen });
+  showPropertyShape() {
+    let open = !this.state.openProperty;
+    if (this.state.propertyMode !== 1) open = true;
+    this.setState({ openProperty: open, propertyMode: 1 });
+    setTimeout(() => {
+      if (this.propShapeView) this.propShapeView.setShape(this.selectedShape);
+    }, 100);
   }
+  showPropertyChart() {
+    let open = !this.state.openProperty;
+    if (this.state.propertyMode !== 2) open = true;
+    this.setState({ openProperty: open, propertyMode: 2 });
+    setTimeout(() => {
+      if (this.propChartView)
+        this.propChartView.setChart(
+          this.selectedShape.props.data.chart,
+          this.selectedShape.chart.declares()
+        );
+    }, 100);
+  }
+  chartPropertyChanged(chartData) {
+    console.log("chartPropertyChanged", chartData);
+    this.selectedShape.setChartData(chartData);
+  }
+
   renderShape(shape) {
     return (
       <ShapeDynamic
@@ -157,7 +191,13 @@ export class DesignBoard extends BaseComponent {
         </IconMenu>
         <FloatingActionButton
           mini={true}
-          onClick={this.showProperty.bind(this)}
+          onClick={this.showPropertyShape.bind(this)}
+        >
+          <i class="material-icons">mode_edit</i>
+        </FloatingActionButton>
+        <FloatingActionButton
+          mini={true}
+          onClick={this.showPropertyChart.bind(this)}
         >
           <i class="material-icons">mode_edit</i>
         </FloatingActionButton>
@@ -177,11 +217,21 @@ export class DesignBoard extends BaseComponent {
           {this.state.shapes.map(shape => this.renderShape(shape))}
         </div>
         <Drawer
-          open={this.state.shapePropertyOpen}
+          open={this.state.openProperty}
           docked={true}
           openSecondary={true}
         >
-          <ShapeProperty onInit={e => this.ovrInitChild("propView", e)} />
+          {this.state.propertyMode === 1 && (
+            <ShapeProperty
+              onInit={e => this.ovrInitChild("propShapeView", e)}
+            />
+          )}
+          {this.state.propertyMode === 2 && (
+            <ChartProperty
+              onInit={e => this.ovrInitChild("propChartView", e)}
+              onChange={this.chartPropertyChanged.bind(this)}
+            />
+          )}
         </Drawer>
         <div style={styles.footer}>{this.renderToolbar()}</div>
       </div>

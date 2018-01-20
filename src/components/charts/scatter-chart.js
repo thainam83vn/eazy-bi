@@ -11,6 +11,13 @@ import {
 } from "recharts";
 
 export class PanScatterChart extends BaseChart {
+  declares() {
+    return {
+      datasourceName: 'ControlDatasourceSelector',
+      XAxis: 'ControlDataFieldSelector',
+      YAxis: 'ControlDataFieldSelector'
+    };
+  }
   render() {
     return (
       <ScatterChart

@@ -11,6 +11,15 @@ import {
 } from "recharts";
 
 export class PanBarChart extends BaseChart {
+  declares() {
+    return {
+      datasourceName: 'ControlDatasourceSelector',      
+      XAxis: 'ControlDataFieldSelector',
+      YAxis: [
+        { dataKey: "ControlDataFieldSelector", fill: "ControlColorSelector" },
+      ],
+    };
+  }
   render() {
     return (
       <BarChart
