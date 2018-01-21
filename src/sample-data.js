@@ -1,3 +1,7 @@
+import { DashboardModel } from "./models/dashboard-model";
+import { EntityModel } from "./models/entity-model";
+import { DashboardItemModel } from "./models/dashboard-item-model";
+
 const data = [
   { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
   { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
@@ -9,7 +13,38 @@ const data = [
 ];
 
 export class SampleData {
-  datasourceSampleCSV1(name){
+  dashboardSample1(name) {
+    let chart1 = new EntityModel({
+      type: "PanLineChart",
+      attributes: {
+        XAxis: "name",
+        YAxis: [
+          { dataKey: "uv", stroke: "#ff0000" },
+          { dataKey: "pv", stroke: "#00ff00" }
+        ],
+        datasourceName: "ds2"
+      }
+    }
+    );
+    let item1 = new DashboardItemModel({
+      id: 1,
+      type:"ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 250,
+        height: 250,
+        left: 0,
+        top: 0
+      },
+      chart: chart1
+    });
+    return new DashboardModel({
+      name: name,
+      items: [item1]
+    });
+  }
+  datasourceSampleCSV1(name) {
     let c = `year,boys,girls
         1629,5218,4683
         1630,4858,4457
@@ -18,8 +53,8 @@ export class SampleData {
         1633,5158,4839
         `;
     return {
-      name : name,
-      setting : {
+      name: name,
+      setting: {
         type: 'csv',
         fileName: 'f1.csv',
         fileContent: c,
@@ -47,7 +82,7 @@ export class SampleData {
         desc: 'Datasource Sample CSV 2'
       }
     }
-  }  
+  }
 
   datasourceSampleCSV3(name) {
     let c = `x,y
@@ -69,7 +104,7 @@ export class SampleData {
         desc: 'Datasource Sample CSV 3'
       }
     }
-  }  
+  }
 
 
   shapeList() {
@@ -202,7 +237,7 @@ export class SampleData {
             { dataKey: "uv", stroke: "#ff0000" },
             { dataKey: "pv", stroke: "#00ff00" }
           ],
-          datasourceName: "ds2"          
+          datasourceName: "ds2"
         }
       }
     };
@@ -227,8 +262,8 @@ export class SampleData {
             { dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
           ],
-          datasourceName: "ds2"  
-          
+          datasourceName: "ds2"
+
         },
       }
     };
@@ -253,8 +288,8 @@ export class SampleData {
             { dataKey: "uv", fill: "#ff0000", stroke: "#ff0000" },
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
           ],
-          datasourceName: "ds2"  
-          
+          datasourceName: "ds2"
+
         },
       }
     };
@@ -280,8 +315,8 @@ export class SampleData {
             { type: "Bar", dataKey: "uv", fill: "#00ff00", stroke: "#00ff00" },
             { type: "Area", dataKey: "uv", fill: "#0000ff", stroke: "#0000ff" }
           ],
-          datasourceName: "ds2"  
-          
+          datasourceName: "ds2"
+
         },
       }
     };
@@ -302,8 +337,8 @@ export class SampleData {
         attributes: {
           XAxis: "x",
           YAxis: "y",
-          datasourceName: "ds3"  
-          
+          datasourceName: "ds3"
+
         },
       }
     };

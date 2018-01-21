@@ -10,6 +10,7 @@ export class ControlDynamic extends BaseControl {
     let Control = components[this.props.attributes.control];
     return (
       <Control
+        style={this.props.style}
         onChange={this.valueChanged.bind(this)}
         key={this.props.attributes.name}
         attributes={this.props.attributes}

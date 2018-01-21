@@ -7,7 +7,7 @@ export class Icon extends Shape {
   }
   ovrInner() {
     return (
-      <i class="material-icons">alarm_add</i>
+      <i className="material-icons">alarm_add</i>
     );
   }
 }

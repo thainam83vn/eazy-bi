@@ -6,13 +6,13 @@ import { BaseComponent } from "./base-component";
 import { DatabaseBoard } from "./database/database-board";
 import { DesignBoard } from "./board";
 import { SampleData } from "./../sample-data";
-import { Datasource} from "./../base/datasource-model";
-import { DatasourceService} from './../services/datasource-service';
+import { Datasource } from "./../models/datasource-model";
+import { DatasourceService } from './../services/datasource-service';
 
 const styles = {
   controls: {
     position: "absolute",
-    bottom: 10,
+    bottom: 0,
     left: 0
   },
   toolbar: {
@@ -24,7 +24,8 @@ const sample = new SampleData();
 
 export class Main extends BaseComponent {
   state = {
-    screen: "Design"
+    screen: "Design",
+    dashboard: null    
   };
   viewDesign: DesignBoard;
   boardData = [];
@@ -36,11 +37,25 @@ export class Main extends BaseComponent {
     new Datasource(sample.datasourceSampleCSV3("ds3"))
   ];
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    for(let ds of this.datasources){
+    for (let ds of this.datasources) {
       DatasourceService.instance().getDatasource(ds.name, ds);
     }
+
+    setTimeout(() => {
+      let dashboard = sample.dashboardSample1("Dashboard 1");
+      this.setState({
+        dashboard: dashboard
+      });
+      console.log("Dashboard:", dashboard);
+
+      // this.viewDesign.addShape(sample.addChart());
+
+      // let circle = sample.addCircle();
+      // circle.style.top = 500;
+      // this.viewDesign.addShape(circle);
+    }, 500);
   }
 
   datasourceChanged(ds) {
@@ -50,12 +65,17 @@ export class Main extends BaseComponent {
 
   renderScreen() {
     if (this.state.screen === "Design") {
-      return (
-        <DesignBoard
-          onInit={e => this.ovrInitChild("viewDesign", e)}
-          data={this.boardData}
-        />
-      );
+      if (this.state.dashboard) {
+        return (
+          <DesignBoard
+            onInit={e => this.ovrInitChild("viewDesign", e)}
+            data={this.boardData}
+            dashboard={this.state.dashboard}
+          />
+        );
+      } else {
+        return null;
+      }
     } else {
       return (
         <DatabaseBoard
@@ -71,25 +91,28 @@ export class Main extends BaseComponent {
     return (
       <IconMenu
         iconButtonElement={
-          <FloatingActionButton mini={true}>
-            {this.state.screen === "Design" && (
-              <i class="material-icons">insert_chart</i>
-            )}
-            {this.state.screen === "Database" && (
-              <i class="material-icons">storage</i>
-            )}
-          </FloatingActionButton>
+          <i style={{ color: "#fff", fontSize: "40px", cursor: "pointer", marginTop: "5px" }} className="material-icons">{this.state.screen === "Design" ? "insert_chart" : "storage"}</i>
         }
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem
-          primaryText="Design"
-          onClick={() => this.switchTo("Design")}
+          primaryText={
+            <div>
+              <span>Design</span>
+              {this.state.screen === "Design" && <i style={{ fontSize: "20px", position: "absolute", top: 13, right: 1 }} className="material-icons">done</i>}
+            </div>
+          }
+          onClick={() => this.state.screen !== "Design" && this.switchTo("Design")}
         />
         <MenuItem
-          primaryText="Database"
-          onClick={() => this.switchTo("Database")}
+          primaryText={
+            <div>
+              <span>Database</span>
+              {this.state.screen === "Database" && <i style={{ fontSize: "20px", position: "absolute", top: 13, right: 1 }} className="material-icons">done</i>}
+            </div>
+          }
+          onClick={() => this.state.screen !== "Database" && this.switchTo("Database")}
         />
       </IconMenu>
     );

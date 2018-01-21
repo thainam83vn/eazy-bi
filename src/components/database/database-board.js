@@ -6,7 +6,7 @@ import FlatButton from "material-ui/FlatButton";
 import { List, ListItem } from "material-ui/List";
 import { BaseComponent } from "./../base-component";
 import { DatasourceView } from "./datasource-view";
-import { Datasource } from "./../../base/datasource-model";
+import { Datasource } from "./../../models/datasource-model";
 import { DialogService } from "./../../services/dialog-service";
 import { SampleData } from "./../../sample-data";
 import { DatasourceService } from "./../../services/datasource-service";
@@ -89,7 +89,7 @@ export class DatabaseBoard extends BaseComponent {
         <IconMenu
           iconButtonElement={
             <FloatingActionButton mini={true}>
-              <i class="material-icons">add</i>
+              <i className="material-icons">add</i>
             </FloatingActionButton>
           }
           anchorOrigin={{ horizontal: "left", vertical: "top" }}

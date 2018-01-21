@@ -1,5 +1,6 @@
 import React from "react";
 import { ControlSelect } from "./control-select";
+import { ControlSelectMini } from "./control-select-mini";
 import { DatasourceService } from "./../../services/datasource-service";
 
 import { BaseControl } from "./base-control";
@@ -50,6 +51,10 @@ export class ControlDataFieldSelector extends BaseControl {
     });
   }
   render() {
-    return <ControlSelect onChange={e => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
+    if (this.props.attributes.mini == true)
+      return <ControlSelectMini style={this.props.style} onChange={e => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
+    else  
+      return <ControlSelect style={this.props.style} onChange={e => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
+
   }
 }

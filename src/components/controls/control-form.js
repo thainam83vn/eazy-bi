@@ -41,6 +41,7 @@ export class ControlForm extends BaseComponent {
       // return <Control key={atts} attributes={{name:atts, value: data}} />;
       return (
         <ControlDynamic
+          key={fieldName}
           onChange={this.valueChanged.bind(this)}
           attributes={{
             name: fieldName,
@@ -68,8 +69,10 @@ export class ControlForm extends BaseComponent {
       let ls = [];
       for (let attKey in atts) {
         let attValue = atts[attKey];
-        let dataValue = data[attKey];
-        ls.push(this.renderRecursive(attKey, attValue, dataValue));
+        if (attValue) {
+          let dataValue = data[attKey];
+          ls.push(this.renderRecursive(attKey, attValue, dataValue));
+        }
       }
       return <div className={fieldName}>{ls}</div>;
     }

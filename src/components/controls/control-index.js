@@ -1,4 +1,6 @@
 import { ControlTextField } from "./control-text-field";
+import { ControlSelect } from "./control-select";
+import { ControlSelectMini } from "./control-select-mini";
 import { ControlColorSelector } from "./control-color-selector";
 import { ControlDataFieldSelector } from "./control-data-field-selector";
 import { ControlDatasourceSelector } from "./control-datasource-selector";
@@ -10,6 +12,8 @@ let components = {}
 //   components[info.name] = comp;
 // }
 components.ControlTextField = ControlTextField;
+components.ControlSelect = ControlSelect;
+components.ControlSelectMini = ControlSelectMini;
 components.ControlColorSelector = ControlColorSelector;
 components.ControlDataFieldSelector = ControlDataFieldSelector;
 components.ControlDatasourceSelector = ControlDatasourceSelector;

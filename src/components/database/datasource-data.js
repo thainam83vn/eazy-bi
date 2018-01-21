@@ -9,7 +9,7 @@ import {
 } from "material-ui/Table";
 
 import { BaseComponent } from "./../base-component";
-import { Datasource } from "./../../base/datasource-model";
+import { Datasource } from "./../../models/datasource-model";
 export class DatasourceData extends BaseComponent {
   datasource: Datasource;
   constructor(props) {

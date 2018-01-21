@@ -2,9 +2,15 @@ import React from "react";
 import { BaseComponent } from "./../base-component";
 import { ControlForm } from "./../controls/control-form";
 
-import { Datasource } from "./../../base/datasource-model";
+import { Datasource } from "./../../models/datasource-model";
 import { DatasourceService } from "./../../services/datasource-service";
 import { Helper } from "./../../lib/Helper";
+
+const styles = {
+  main:{
+    padding: "10px"
+  }
+}
 
 export class ChartProperty extends BaseComponent {
   round = 0;
@@ -27,7 +33,7 @@ export class ChartProperty extends BaseComponent {
   render() {
     if (this.state.chart) {
       return (
-        <div>
+        <div style={styles.main}>
           <div>Chart Properties</div>
           <div>
             <ControlForm

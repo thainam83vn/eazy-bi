@@ -8,6 +8,7 @@ export class ControlSelect extends BaseControl {
   render() {
     return (
       <SelectField
+        style={this.props.style}
         floatingLabelText={this.props.attributes.name}
         value={this.state.value}
         onChange={(event, index, value) => this.valueChanged(value)}

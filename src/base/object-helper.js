@@ -1,5 +1,5 @@
 export class ObjectHelper {
-  static merge(arr){
+  static merge(...arr){
     let r = {};
     for(let a of arr){
       for(let key in a){

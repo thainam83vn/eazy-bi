@@ -3,43 +3,10 @@ import { BaseComponent } from "./../base-component";
 
 import { Helper } from "../../lib/Helper";
 import { ShapeStyleCollection } from "./shape-style";
-
-const styles = {
-  selected: {
-    position: "absolute",
-    width: "100%",
-    height: "100%"
-  },
-  selectedDot: {
-    position: "absolute",
-    width: 5,
-    height: 5,
-    background: "#3d3d3d",
-    cursor: "crosshair"
-  },
-  inner:{
-    overflow:'hidden'
-  },
-  dot1: {
-    top: -5,
-    left: -5
-  },
-  dot2: {
-    top: -5,
-    left: "100%"
-  },
-  dot3: {
-    top: "100%",
-    left: "100%"
-  },
-  dot4: {
-    top: "100%",
-    left: -5
-  }
-};
+import { DomHelper } from "../../base/dom-helper";
 
 export class Shape extends BaseComponent {
-  shapeId = null;  
+  shapeId = null;
   shapeType = null;
 
   dots = [true, true, true, true];
@@ -51,7 +18,7 @@ export class Shape extends BaseComponent {
 
   ovrDeclareStyle() {
     this.styleCollection.add("cursor", "default", null);
-    this.styleCollection.add("position", "absolute", null); 
+    this.styleCollection.add("position", "absolute", null);
 
     this.styleCollection.add("width", this.props.data.style.width, null);
     this.styleCollection.add("height", this.props.data.style.height, null);
@@ -59,7 +26,7 @@ export class Shape extends BaseComponent {
     this.styleCollection.add("left", this.props.data.style.left, null);
 
     this.styleCollection.add("color", this.props.data.style.color, "TextBox");
-    this.styleCollection.add( 
+    this.styleCollection.add(
       "background",
       this.props.data.style.background,
       "TextBox"
@@ -72,7 +39,7 @@ export class Shape extends BaseComponent {
     this.shapeType = this.props.data.type;
     this.shapeId = this.props.data.id;
     this.ovrDeclareStyle();
-    
+
     this.state = {
       isSelected: this.props.data.selected ? this.props.data.selected : false,
       isMouseDown: false,
@@ -82,12 +49,12 @@ export class Shape extends BaseComponent {
     };
   }
 
-  data(){
+  data() {
     let style = this.styleCollection.output();
     return {
       id: this.shapeId,
       type: this.shapeType,
-      style:style,
+      style: style,
     };
   }
 
@@ -187,14 +154,28 @@ export class Shape extends BaseComponent {
       mousedownY: nave.offsetY
     });
     // this.select(nave.target === this.target);
-    
+
     if (this.props.onDrag) this.props.onDrag(this);
   }
+  mousemove(e) {
+    if (this.state.isMouseDown) {
+      let nave = e.nativeEvent;
+      let delX = nave.offsetX - this.state.mousedownX;
+      let delY = nave.offsetY - this.state.mousedownY;
+      this.updateRect(
+        this.state.style.left + delX,
+        this.state.style.top + delY,
+        this.state.style.width,
+        this.state.style.height
+      );
+    }
+  }
+
   mouseup(e) {
     this.setState({ isMouseDown: false });
     if (this.props.onDrop) this.props.onDrop(this);
-  } 
-  
+  }
+
   updateRect(x, y, w, h) {
     if (w <= 0) w = 2;
     if (h <= 0) h = 2;
@@ -211,19 +192,7 @@ export class Shape extends BaseComponent {
     }
     this.refreshStyle();
   }
-  mousemove(e) {
-    if (this.state.isMouseDown) {
-      let nave = e.nativeEvent;
-      let delX = nave.offsetX - this.state.mousedownX;
-      let delY = nave.offsetY - this.state.mousedownY;
-      this.updateRect(
-        this.state.style.left + delX,
-        this.state.style.top + delY,
-        this.state.style.width,
-        this.state.style.height
-      );
-    }
-  }
+
   mousedownOutside(e) {
     let nave = e.nativeEvent;
     this.select(nave.target === this.target);
@@ -233,10 +202,13 @@ export class Shape extends BaseComponent {
 
     if (!this.isResizing) {
       if (this.state.isMouseDown) {
-        if (nave.target !== this.target) {
+        if (!DomHelper.contains(this.target, nave.target)) {
+          let newx = nave.clientX - this.state.mousedownX;
+          let newy = nave.clientY - this.state.mousedownY;
+          // console.log(`moveOutside(new):(${this.state.style.left},${this.state.style.top},${this.state.style.width},${this.state.style.height}) (${nave.clientX}, ${nave.clientY})`, nave);
           this.updateRect(
-            nave.clientX - this.state.style.width / 2,
-            nave.clientY - this.state.style.height / 2,
+            newx,
+            newy,
             this.state.style.width,
             this.state.style.height
           );
@@ -336,6 +308,8 @@ export class Shape extends BaseComponent {
   render() {
     return (
       <div
+        className="shape"
+        ref={element => this.target = element}
         style={this.state.style}
         onMouseDown={this.mousedown.bind(this)}
         onMouseUp={this.mouseup.bind(this)}
@@ -378,3 +352,37 @@ export class Shape extends BaseComponent {
     );
   }
 }
+
+const styles = {
+  selected: {
+    position: "absolute",
+    width: "100%",
+    height: "100%"
+  },
+  selectedDot: {
+    position: "absolute",
+    width: 5,
+    height: 5,
+    background: "#3d3d3d",
+    cursor: "crosshair"
+  },
+  inner: {
+    overflow: 'hidden'
+  },
+  dot1: {
+    top: -5,
+    left: -5
+  },
+  dot2: {
+    top: -5,
+    left: "100%"
+  },
+  dot3: {
+    top: "100%",
+    left: "100%"
+  },
+  dot4: {
+    top: "100%",
+    left: -5
+  }
+};

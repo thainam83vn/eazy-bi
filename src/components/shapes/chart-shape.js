@@ -81,12 +81,13 @@ export class ChartShape extends Shape {
   ovrInner() {
     return (
       <div style={styles.main}>
-        {this.state.loading && <span>loading...</span>}
+        {this.state.loading && <span>moving...</span>}
         {!this.state.loading && (
           <ChartDynamic
             onInit={this.initChart.bind(this)}
             type={this.props.data.chart.type}
             chart={this.props.data.chart}
+            onChange={(e)=>{if (this.props.onChange) this.props.onChange(e)}}
           />
         )}
       </div>

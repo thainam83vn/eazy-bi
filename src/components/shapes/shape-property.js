@@ -1,13 +1,20 @@
 import React from "react";
 import TextField from "material-ui/TextField";
 import { BaseComponent } from "./../base-component";
+import { ControlForm } from "./../controls/control-form";
 import { Helper } from "./../../lib/Helper";
 import { Shape } from "./shape";
+
+const styles = {
+  main: {
+    padding: "10px"
+  }
+}
 
 export class ShapeProperty extends BaseComponent {
   shape: Shape;
   state = {
-    styles: []
+    styles: null
   };
   round = 0;
 
@@ -15,29 +22,47 @@ export class ShapeProperty extends BaseComponent {
     super(props);
   }
   setShape(shape) {
-    this.round++;
-    this.shape = shape;
-    let styles = Helper.predict(
-      Helper.asArray(this.shape.styleCollection.styles),
-      o => o.editor
-    );
-    this.setState({ styles: styles });
-    console.log("property:", styles);
+    this.loading(true, ()=>{
+      this.round++;
+      this.shape = shape;
+      // let styles = Helper.predict(
+      //   Helper.asArray(this.shape.styleCollection.styles),
+      //   o => o.editor
+      // );
+      let styles = this.shape.styleCollection.output();
+      for (let key in styles) {
+        if (!StyleControlMapping[key])
+          delete styles[key];
+      }
+      this.setState({ styles: styles });
+      this.loading(false);
+      // console.log("property:", styles);
+    });
+    
   }
   valueChanged(e, style) {
-    console.log("Value changed:", e, style);
-    let name = style.name;
-    let value = e.target.value;
-    this.shape.updateStyle({[name]:value});
+    // console.log("Value changed:", e, style);
+    // let name = style.name;
+    // let value = e.target.value;
+    this.shape.updateStyle(e);
 
     // this.shape.styleCollection.update(style.name, e.target.value);
     // this.shape.refreshStyle();
   }
   render() {
-    return (
-      <div>
-        <div>Properties</div>
-        <div>
+    if (this.state.styles) {
+      if (!this.isLoading) {
+        return (
+          <div style={styles.main}>
+            <div>Style Properties</div>
+            <div>
+              <ControlForm
+                onChange={this.valueChanged.bind(this)}
+                declares={StyleControlMapping}
+                data={this.state.styles}
+              />
+            </div>
+            {/* <div>
           {this.state.styles.map(style => (
             <TextField
               key={this.round + style.name}
@@ -46,8 +71,19 @@ export class ShapeProperty extends BaseComponent {
               onChange={e => this.valueChanged(e, style)}
             />
           ))}
-        </div>
-      </div>
-    );
+        </div> */}
+          </div>
+        );
+      } else {
+        return this.ovrLoadComponent();
+      }
+    }
+    return null;
   }
 }
+
+
+const StyleControlMapping = {
+  background: "ControlColorSelector",
+  color: "ControlColorSelector",
+};

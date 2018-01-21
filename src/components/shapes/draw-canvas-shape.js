@@ -13,12 +13,12 @@ export class DrawCanvasShape extends CanvasShape {
     this.styleCollection.add(
       "strokeColor",
       this.props.data.strokeColor,
-      null
+      "TextBox"
     );
     this.styleCollection.add(
       "strokeWidth",
       this.props.data.strokeWidth,
-      null
+      "TextBox"
     );
   }
 }

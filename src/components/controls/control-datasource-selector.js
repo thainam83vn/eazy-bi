@@ -22,6 +22,6 @@ export class ControlDatasourceSelector extends BaseControl {
     };
   }
   render() {
-    return <ControlSelect onChange={(e) => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
+    return <ControlSelect style={this.props.style} onChange={(e) => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { BaseComponent } from "./base-component";
 import { ControlForm } from './controls/control-form';
 
-import {Datasource} from './../base/datasource-model';
+import {Datasource} from './../models/datasource-model';
 import {DatasourceService} from './../services/datasource-service';
 import {SampleData} from './../sample-data';
 const sample = new SampleData();

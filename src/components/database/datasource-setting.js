@@ -4,7 +4,7 @@ import MenuItem from "material-ui/MenuItem";
 
 import { BaseComponent } from "./../base-component";
 import { CsvSetting } from "./csv-setting";
-import { Datasource } from "./../../base/datasource-model";
+import { Datasource } from "./../../models/datasource-model";
 
 const styles = {
   main: {

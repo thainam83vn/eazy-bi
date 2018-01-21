@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, Tab } from "material-ui/Tabs";
 import { BaseComponent } from "./../base-component";
-import { Datasource } from "./../../base/datasource-model";
+import { Datasource } from "./../../models/datasource-model";
 import { DatasourceSetting } from "./datasource-setting";
 import { DatasourceData } from "./datasource-data";
 

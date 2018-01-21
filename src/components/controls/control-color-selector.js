@@ -13,19 +13,27 @@ const styles = {
 }
 
 export class ControlColorSelector extends BaseControl {
+  value = "#ffffff";
   constructor(props) {
     super(props);
     this.state = {
       value: this.props.attributes.value
     };
+    this.value = this.props.attributes.value;
+  }
+
+  valueChanged(e){
+    super.valueChanged(e);
+    this.value = e;
+    this.forceUpdate();
   }
  
   render() {
     return (
-      <IconMenu
+      <IconMenu style={this.props.style}
         iconButtonElement={
           <div>
-            <div style={ObjectHelper.merge([styles.boxBottomLine, {borderBottomColor:this.state.value}])}>
+            <div style={ObjectHelper.merge(styles.boxBottomLine, {borderBottomColor:this.value})}>
               <FlatButton label={this.props.attributes.name} />
             </div>            
           </div>
@@ -34,7 +42,7 @@ export class ControlColorSelector extends BaseControl {
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <SketchPicker
-          color={this.state.value}
+          color={this.value}
           onChangeComplete={e => this.valueChanged(e.hex)}
         />
       </IconMenu>

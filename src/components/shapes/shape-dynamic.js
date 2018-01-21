@@ -25,7 +25,9 @@ export class ShapeDynamic extends React.Component {
         onDrag={this.dragShape.bind(this)}
         onDrop={this.dropShape.bind(this)}
         onSelected={this.selected.bind(this)}
-        data={shape} />
+        data={shape}
+        onChange={(e)=>{if (this.props.onChange) this.props.onChange(e)}} 
+        onRectChange={(e)=>{if (this.props.onChange) this.props.onChange(e)}} />
     } 
     return null;
   }
