@@ -13,19 +13,35 @@ const data = [
 ];
 
 export class SampleData {
+  entitiesSample(){
+    return {
+      LineChart1:new EntityModel({
+        name: "LineChart1",
+        type: "PanLineChart",
+        attributes: {
+          XAxis: "name",
+          YAxis: [
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
+          ],
+          datasourceName: "ds2"
+        }
+      }),
+      BarChart1:new EntityModel({
+        name: "BarChart1",
+        type: "PanBarChart",
+        attributes: {
+          XAxis: "name",
+          YAxis: [
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
+          ],
+          datasourceName: "ds2"
+        }
+      })
+    };
+  }
   dashboardSample1(name) {
-    let chart1 = new EntityModel({
-      type: "PanLineChart",
-      attributes: {
-        XAxis: "name",
-        YAxis: [
-          { dataKey: "uv", stroke: "#ff0000" },
-          { dataKey: "pv", stroke: "#00ff00" }
-        ],
-        datasourceName: "ds2"
-      }
-    }
-    );
     let item1 = new DashboardItemModel({
       id: 1,
       type:"ChartShape",
@@ -37,7 +53,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: chart1
+      chartName: "LineChart1"
     });
     return new DashboardModel({
       name: name,

@@ -3,7 +3,7 @@ import { EntityModel } from "./entity-model";
 
 export class DashboardItemModel extends BaseModel {
   id: string;
-  chart: EntityModel;
+  chartName: string;
   styles:any;
   constructor(props) {
     super(props);

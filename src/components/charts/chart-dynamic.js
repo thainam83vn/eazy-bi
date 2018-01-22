@@ -14,6 +14,8 @@ export class ChartDynamic extends React.Component {
         <Component
           onInit={this.initChart.bind(this)}
           attributes={this.props.chart.attributes}
+          width={this.props.width}
+          height={this.props.height}
           onChange={(e)=>{if (this.props.onChange) this.props.onChange(e)}}
         />
       );

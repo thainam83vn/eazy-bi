@@ -3,6 +3,7 @@ import { BaseComponent } from "./../base-component";
 import { Shape } from "./shape";
 import { ChartDynamic } from "./../charts/chart-dynamic";
 import { BaseChart } from "./../charts/chart";
+import { EntityService } from "../../services/entity-service";
 const styles = {
   main: {
     position: "absolute",
@@ -14,24 +15,20 @@ const styles = {
 
 export class ChartShape extends Shape {
   chartData = null;
-  chart: BaseChart;
+  chartView: BaseChart;
   constructor(props) {
     super(props);
-    this.chartData = this.props.data.chart;
-    this.props.data.chart.attributes.width = this.props.data.style.width;
-    this.props.data.chart.attributes.height = this.props.data.style.height;
+    this.chartData = EntityService.instance().getEntity(this.props.data.chartName).data;
+    this.chartData.width = this.props.data.style.width;
+    this.chartData.height = this.props.data.style.height;
     // this.setState({ loading: false });
     this.state.loading = false;
   }
 
-  data(){
+  data() {
     let r = super.data();
     r.chart = this.chartData;
     return r;
-  }
-
-  initChart(chart) {
-    this.chart = chart;
   }
 
   ovrDeclareStyle() {
@@ -44,12 +41,12 @@ export class ChartShape extends Shape {
     this.refreshChart();
   }
 
-  setChartData(chartData){
+  setChartData(chartData) {
     this.setState({ loading: true });
     setTimeout(() => {
       this.props.data.chart.attributes = chartData;
       console.log("updateChartData:", this.props.data.chart);
-      
+
       this.setState({ loading: false });
     }, 200);
   }
@@ -67,8 +64,8 @@ export class ChartShape extends Shape {
   }
 
   reloadChart() {
-    this.props.data.chart.attributes.width = this.state.style.width;
-    this.props.data.chart.attributes.height = this.state.style.height;
+    this.chartData.width = this.props.data.style.width;
+    this.chartData.height = this.props.data.style.height;
     // this.chart.attributes.updateMany({
     //   width: this.state.style.width,
     //   height: this.state.style.height
@@ -84,10 +81,12 @@ export class ChartShape extends Shape {
         {this.state.loading && <span>moving...</span>}
         {!this.state.loading && (
           <ChartDynamic
-            onInit={this.initChart.bind(this)}
-            type={this.props.data.chart.type}
-            chart={this.props.data.chart}
-            onChange={(e)=>{if (this.props.onChange) this.props.onChange(e)}}
+            onInit={(e)=>{this.ovrInitChild("chartView", e)}}
+            type={this.chartData.type}
+            chart={this.chartData}
+            width={this.props.data.style.width}
+            height={this.props.data.style.height}
+            onChange={(e) => { if (this.props.onChange) this.props.onChange(e) }}
           />
         )}
       </div>

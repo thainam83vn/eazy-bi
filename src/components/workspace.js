@@ -14,6 +14,8 @@ import { DialogService } from "../services/dialog-service";
 import { Helper } from "../lib/Helper";
 import { DesignBoard } from "./board";
 import { ObjectHelper } from "../base/object-helper";
+import { ObjectExplorer } from "./object-explorer";
+import { EntityService } from "../services/entity-service";
 
 const StrDashboard = "Dashboard";
 
@@ -50,49 +52,35 @@ export class WorkSpace extends BaseComponent {
     new Datasource(sample.datasourceSampleCSV3("ds3"))
   ];
   dashboards = {
-    "Dashboard 1":sample.dashboardSample1("Dashboard 1")
+    "Dashboard 1": sample.dashboardSample1("Dashboard 1")
   };
-
   constructor(props) {
     super(props);
     for (let ds of this.datasources) {
       DatasourceService.instance().getDatasource(ds.name, ds);
     }
 
+    let entities = sample.entitiesSample();
+    for (let key in entities) {
+      EntityService.instance().getEntity(key, entities[key]);
+    }
+
     this.state = {
-      selectedDashboard: null
+      selectedDashboard: null,
     };
 
     setTimeout(() => {
     }, 500);
   }
 
-  renderScreen() {
-    return null;
-  }
-
-  renderScreenMenu() {
-    return (
-      <IconMenu
-        iconButtonElement={
-          <i style={{ color: "#fff", fontSize: "40px", cursor: "pointer", marginTop: "5px" }} className="material-icons">{this.state.screen === "Design" ? "insert_chart" : "storage"}</i>
-        }
-        anchorOrigin={{ horizontal: "left", vertical: "top" }}
-        targetOrigin={{ horizontal: "left", vertical: "top" }}
-      >
-
-      </IconMenu>
-    );
-  }
-
   selectDashboard(e) {
     this.setState({
       selectedDashboard: null
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
         selectedDashboard: e[StrDashboard]
-      });  
+      });
     }, 50);
   }
 
@@ -100,7 +88,7 @@ export class WorkSpace extends BaseComponent {
     console.log("addDashboard");
     DialogService.instance().prompt("New Dashboard", "Dashboard Name", "", (r) => {
       if (r) {
-        if (this.dashboards[r]){
+        if (this.dashboards[r]) {
           DialogService.instance().alert('Invalid Dashboard Name', `Name ${r} is not available`, () => {
             this.addDashboard();
           });
@@ -113,13 +101,22 @@ export class WorkSpace extends BaseComponent {
     });
   }
 
-  boardChanged(dashboard){
+  boardChanged(dashboard) {
     console.log("BoardChanged:", this.dashboards, dashboard);
+  }
+
+  renderObjectExplorer() {
+    return <div>
+      <div>Object Explorer</div>
+      <ObjectExplorer />
+    </div>;
   }
 
   render() {
     return (
       <div>
+        <div style={styles.footer}></div>
+
         <div style={styles.body}>
           <SplitterLayout percentage="true" secondaryInitialSize="80">
             <div >
@@ -133,7 +130,7 @@ export class WorkSpace extends BaseComponent {
                       <i style={{ position: "absolute", top: 0, right: 0 }} className="material-icons">keyboard_arrow_down</i>
                     </div>
                   }
-                  attributes={{ name: StrDashboard, value: this.state.selectedDashboard, options: Helper.asArray(ObjectHelper.merge(this.dashboards, {"New Dashboard..":{ name: "New Dashboard..", value: "@NewDashboard" }})) }}
+                  attributes={{ name: StrDashboard, value: this.state.selectedDashboard, options: Helper.asArray(ObjectHelper.merge(this.dashboards, { "New Dashboard..": { name: "New Dashboard..", value: "@NewDashboard" } })) }}
                   onBeforeChange={e => {
                     if (e[StrDashboard] === "New Dashboard..") {
                       this.addDashboard();
@@ -143,9 +140,7 @@ export class WorkSpace extends BaseComponent {
                   }}
                   onChange={(e) => this.selectDashboard(e)} />
               </div>
-              <div>
-                Object Explorer
-              </div>
+              {this.renderObjectExplorer()}
             </div>
             <div>
               {this.state.selectedDashboard && (
@@ -158,7 +153,6 @@ export class WorkSpace extends BaseComponent {
             </div>
           </SplitterLayout>
         </div>
-        <div style={styles.footer}></div>
       </div>
     );
   }

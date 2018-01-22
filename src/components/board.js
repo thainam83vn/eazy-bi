@@ -267,7 +267,7 @@ export class DesignBoard extends BaseComponent {
             />
           )}
         </Drawer>
-        <div style={styles.footer}>{this.renderToolbar()}</div>
+        {/* <div style={styles.footer}>{this.renderToolbar()}</div> */}
       </div>
     );
   }

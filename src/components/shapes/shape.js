@@ -203,8 +203,8 @@ export class Shape extends BaseComponent {
     if (!this.isResizing) {
       if (this.state.isMouseDown) {
         if (!DomHelper.contains(this.target, nave.target)) {
-          let newx = nave.clientX - this.state.mousedownX;
-          let newy = nave.clientY - this.state.mousedownY;
+          let newx = nave.offsetX - this.state.mousedownX;
+          let newy = nave.offsetY - this.state.mousedownY;
           // console.log(`moveOutside(new):(${this.state.style.left},${this.state.style.top},${this.state.style.width},${this.state.style.height}) (${nave.clientX}, ${nave.clientY})`, nave);
           this.updateRect(
             newx,
@@ -215,69 +215,54 @@ export class Shape extends BaseComponent {
         }
       }
     } else {
+      let nx = 0;
+      let ny = 0;
+      let outside = !DomHelper.contains(this.target, nave.target);
+      if (outside) {
+        nx = nave.offsetX;
+        ny = nave.offsetY;
+      } else {
+        nx = this.state.style.left + nave.offsetX;
+        ny = this.state.style.top + nave.offsetY;
+      }
       let x1 = this.state.style.left;
       let y1 = this.state.style.top;
       let x2 = x1 + this.state.style.width;
       let y2 = y1 + this.state.style.height;
       if (this.resizeCornor === 1) {
-        x1 = nave.clientX;
-        y1 = nave.clientY;
+        x1 = nx;
+        y1 = ny;
       }
       if (this.resizeCornor === 2) {
-        x2 = nave.clientX;
-        y1 = nave.clientY;
+        if (nave.target.className==="dot2") {
+          x2 = nx+this.state.style.width;
+          y1 = ny
+        } else {
+          x2 = nx;
+          y1 = ny;
+        }
+        
       }
       if (this.resizeCornor === 3) {
-        x2 = nave.clientX;
-        y2 = nave.clientY;
+        if (nave.target.className==="dot3") {
+          x2 = nx+this.state.style.width;
+          y2 = ny+this.state.style.height;
+        } else {
+          x2 = nx;
+          y2 = ny;  
+        }
       }
       if (this.resizeCornor === 4) {
-        x1 = nave.clientX;
-        y2 = nave.clientY;
+        if (nave.target.className==="dot4") {
+          x1 = nx;
+          y2 = ny+this.state.style.height;
+        } else {
+          x1 = nx;
+          y2 = ny;
+        }
       }
+      console.log(`AdjustResize:${outside} (${nx - this.state.style.left},${ny - this.state.style.top}) (${nx},${ny}) ${nave.target.classList}`, nave);
       this.ovrAdjustResize(x1, y1, x2, y2);
-
-      // if (this.resizeCornor === 1) {
-      //   x1 = nave.clientX;
-      //   y1 = nave.clientY;
-      //   if (x1 > x2 - 1) {
-      //     x1 = x2 - 1;
-      //   }
-      //   if (y1 > y2 - 1) {
-      //     y1 = y2 - 1;
-      //   }
-      // }
-      // if (this.resizeCornor === 2) {
-      //   x2 = nave.clientX;
-      //   y1 = nave.clientY;
-      //   if (x2 < x1 + 1) {
-      //     x2 = x1 + 1;
-      //   }
-      //   if (y1 > y2 - 1) {
-      //     y1 = y2 - 1;
-      //   }
-      // }
-      // if (this.resizeCornor === 3) {
-      //   x2 = nave.clientX;
-      //   y2 = nave.clientY;
-      //   if (x2 < x1 + 1) {
-      //     x2 = x1 + 1;
-      //   }
-      //   if (y2 < y1 + 1) {
-      //     y2 = y1 + 1;
-      //   }
-      // }
-      // if (this.resizeCornor === 4) {
-      //   x1 = nave.clientX;
-      //   y2 = nave.clientY;
-      //   if (x1 > x2) {
-      //     x1 = x2;
-      //   }
-      //   if (y2 < y1) {
-      //     y2 = y1;
-      //   }
-      // }
-      // this.updateRect(x1, y1, x2 - x1, y2 - y1);
     }
   }
 
@@ -322,25 +307,25 @@ export class Shape extends BaseComponent {
           {this.state.isSelected && (
             <div style={styles.selected}>
               {this.dots[0] && (
-                <div
+                <div className="dot1"
                   style={Helper.merge(styles.selectedDot, styles.dot1)}
                   onMouseDown={() => this.startResize(1)}
                 />
               )}
               {this.dots[1] && (
-                <div
+                <div className="dot2"
                   style={Helper.merge(styles.selectedDot, styles.dot2)}
                   onMouseDown={() => this.startResize(2)}
                 />
               )}
               {this.dots[2] && (
-                <div
+                <div className="dot3"
                   style={Helper.merge(styles.selectedDot, styles.dot3)}
                   onMouseDown={() => this.startResize(3)}
                 />
               )}
               {this.dots[3] && (
-                <div
+                <div className="dot4"
                   style={Helper.merge(styles.selectedDot, styles.dot4)}
                   onMouseDown={() => this.startResize(4)}
                 />
