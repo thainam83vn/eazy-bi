@@ -43,7 +43,7 @@ export class ChartShape extends Shape {
   setChartData(chartData) {
     this.setState({ loading: true });
     setTimeout(() => {
-      this.props.data.chart.attributes = chartData;
+      this.props.data.inner.attributes = chartData;
       console.log("updateChartData:", this.props.data.chart);
 
       this.setState({ loading: false });

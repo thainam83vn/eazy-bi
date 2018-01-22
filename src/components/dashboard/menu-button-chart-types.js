@@ -1,8 +1,6 @@
 import React from "react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
-import Drawer from "material-ui/Drawer";
-import FloatingActionButton from "material-ui/FloatingActionButton";
 
 import { BaseComponent } from "./../base-component";
 import {SampleData} from "./../../sample-data";
@@ -65,9 +63,7 @@ export class MenuButtonChartTypes extends BaseComponent {
           primaryText="Scatter Chart"
           onClick={() => this.addShape(sample.addScatterChart())}
         />
-      </IconMenu>
-      // <i className="material-icons" style={styles.toolbarButton} onClick={this.showPropertyShape.bind(this)}>style</i>
-      // <i className="material-icons" style={styles.toolbarButton} onClick={this.showPropertyChart.bind(this)}>mode_edit</i>
+      </IconMenu>   
     );
   }
 }
