@@ -18,7 +18,9 @@ export class CsvSetting extends BaseComponent {
     return (
       <div>
         <Uploader onUploaded={this.uploaded.bind(this)} />
-        {this.state.csv}
+        <div style={{border:"1px solid #3d3d3d",color:"#3d3d3d"}}>
+          {this.state.csv}
+        </div>
       </div>
     );
   }

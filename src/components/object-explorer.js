@@ -12,7 +12,7 @@ import { DatasourceService } from './../services/datasource-service';
 import { ArrayHelper } from "../base/array-helper";
 import { DialogService } from "../services/dialog-service";
 import { Helper } from "../lib/Helper";
-import { DesignBoard } from "./board";
+import { DesignBoard } from "./dashboard/board";
 import { ObjectHelper } from "../base/object-helper";
 import { EntityService } from "../services/entity-service";
 
@@ -43,21 +43,6 @@ export class ObjectExplorer extends BaseComponent {
       );
     }
     return <div style={styles.main}>
-      <Card >
-        <CardHeader
-          title="Charts"
-          actAsExpander={true}
-          showExpandableButton={true}
-        />
-        <CardText expandable={true}>
-          <div>
-            {items}
-          </div>
-          <div>
-            <FlatButton label="Add" />
-          </div>
-        </CardText>
-      </Card>
     </div>;
   }
 }

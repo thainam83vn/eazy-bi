@@ -9,13 +9,13 @@ import { ProxyData } from './../../base/proxy-data';
 
 export class DatasourceView extends BaseComponent {
   viewData : DatasourceData;
-
   proxyData: ProxyData;
-  state = {
-    datasource: null
-  };
+
   constructor(props) {
     super(props);
+    this.state = {
+      datasource: this.props.datasource
+    }
   }
   setDatasource(d: ProxyData) {
     this.proxyData = d;
@@ -32,7 +32,7 @@ export class DatasourceView extends BaseComponent {
   render() {
     return (
       <div>
-        <Tabs>
+        <Tabs tabItemContainerStyle={{ background: this.props.style.headerBackground}}>
           <Tab label="Configuration">
             {this.state.datasource && (
               <DatasourceSetting datasource={this.state.datasource} onChange={this.settingChange.bind(this)} />

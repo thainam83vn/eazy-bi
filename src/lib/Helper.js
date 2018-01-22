@@ -9,7 +9,7 @@ export class Helper {
     return o;
   }
 
-  static asArray(obj) {
+  static asArray(obj):[] {
     let r = [];
     for (let k in obj) {
       r.push(obj[k]);

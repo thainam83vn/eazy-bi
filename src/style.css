@@ -1,11 +1,34 @@
-body{
-  margin: 0px;
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #484848;
 }
 
-.splitter-layout{
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #484848;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #212121;
+}
+
+body {
+  margin: 0px;
+  font-family: "Roboto, sans-serif";
+}
+
+.splitter-layout {
   position: relative !important;
 }
 
-.shape span,div{
+.layout-pane-primary {
+  background: #484848 !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+.shape span,
+div {
   user-select: none;
 }

@@ -4,7 +4,7 @@ import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import { BaseComponent } from "./base-component";
 import { DatabaseBoard } from "./database/database-board";
-import { DesignBoard } from "./board";
+import { DesignBoard } from "./dashboard/board";
 import { SampleData } from "./../sample-data";
 import { Datasource } from "./../models/datasource-model";
 import { DatasourceService } from './../services/datasource-service';

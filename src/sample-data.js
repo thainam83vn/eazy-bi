@@ -1,6 +1,8 @@
+import { Datasource} from "./models/datasource-model";
 import { DashboardModel } from "./models/dashboard-model";
 import { EntityModel } from "./models/entity-model";
 import { DashboardItemModel } from "./models/dashboard-item-model";
+import { WorkspaceModel } from "./models/workspace-model";
 
 const data = [
   { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
@@ -41,6 +43,19 @@ export class SampleData {
       })
     };
   }
+  workspaceSample1(name):WorkspaceModel {
+    let dashboards = {dashboard1:new this.dashboardSample1("dashboard1")};
+    let datasources = {
+      ds1:new Datasource(this.datasourceSampleCSV1("ds1")),
+      ds2:new Datasource(this.datasourceSampleCSV2("ds2")),
+      ds3:new Datasource(this.datasourceSampleCSV3("ds3"))
+    };
+    return new DashboardModel({
+      workspaceName: name,
+      dashboards: dashboards,
+      datasources: datasources
+    });
+  }
   dashboardSample1(name) {
     let item1 = new DashboardItemModel({
       id: 1,
@@ -53,10 +68,21 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chartName: "LineChart1"
+      inner: new EntityModel({
+        name: "LineChart1",
+        type: "PanLineChart",
+        attributes: {
+          XAxis: "name",
+          YAxis: [
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
+          ],
+          datasourceName: "ds2"
+        }
+      })
     });
     return new DashboardModel({
-      name: name,
+      dashboardName: name,
       items: [item1]
     });
   }
@@ -245,7 +271,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: {
+      inner: {
         type: "PanLineChart",
         attributes: {
           XAxis: "name",
@@ -270,7 +296,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: {
+      inner: {
         type: "PanBarChart",
         attributes: {
           XAxis: "name",
@@ -296,7 +322,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: {
+      inner: {
         type: "PanAreaChart",
         attributes: {
           XAxis: "name",
@@ -322,7 +348,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: {
+      inner: {
         type: "PanComposeChart",
         attributes: {
           XAxis: "name",
@@ -348,7 +374,7 @@ export class SampleData {
         left: 0,
         top: 0
       },
-      chart: {
+      inner: {
         type: "PanScatterChart",
         attributes: {
           XAxis: "x",

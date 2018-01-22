@@ -18,10 +18,9 @@ export class ChartShape extends Shape {
   chartView: BaseChart;
   constructor(props) {
     super(props);
-    this.chartData = EntityService.instance().getEntity(this.props.data.chartName).data;
-    this.chartData.width = this.props.data.style.width;
-    this.chartData.height = this.props.data.style.height;
-    // this.setState({ loading: false });
+    this.chartData = this.props.data.inner;
+    // this.chartData.width = this.props.data.style.width;
+    // this.chartData.height = this.props.data.style.height;
     this.state.loading = false;
   }
 
@@ -64,12 +63,9 @@ export class ChartShape extends Shape {
   }
 
   reloadChart() {
-    this.chartData.width = this.props.data.style.width;
-    this.chartData.height = this.props.data.style.height;
-    // this.chart.attributes.updateMany({
-    //   width: this.state.style.width,
-    //   height: this.state.style.height
-    // });
+    // this.chartData.width = this.props.data.style.width;
+    // this.chartData.height = this.props.data.style.height;
+
     setTimeout(() => {
       this.setState({ loading: false });
     }, 200);

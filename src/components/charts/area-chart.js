@@ -22,8 +22,8 @@ export class PanAreaChart extends BaseChart {
   render() {
     return (
       <AreaChart
-        width={this.state.attributes.width}
-        height={this.state.attributes.height}
+        width={this.props.width}
+        height={this.props.height}
         data={this.state.data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >

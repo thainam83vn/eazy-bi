@@ -3,28 +3,29 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import Drawer from "material-ui/Drawer";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import { BaseComponent } from "./base-component";
-import { ShapeDynamic } from "./shapes/shape-dynamic";
-import { Shape } from "./shapes/shape";
-import { SampleData } from "./../sample-data";
-import { ShapeProperty } from "./shapes/shape-property";
-import { ChartProperty } from "./charts/chart-property";
-import { ProxyData } from "./../base/proxy-data";
+
+import varStyles from "./../../var-styles";
+import { BaseComponent } from "./../base-component";
+import { ShapeDynamic } from "./../shapes/shape-dynamic";
+import { Shape } from "./../shapes/shape";
+import { SampleData } from "./../../sample-data";
+import { ShapeProperty } from "./../shapes/shape-property";
+import { ChartProperty } from "./../charts/chart-property";
+import { ProxyData } from "./../../base/proxy-data";
+
+import {MenuButtonChartTypes} from './menu-button-chart-types'
 
 const styles = {
   drawing: {
     background: "#ededed",
     width: "100%",
-    height: "calc(100vh - 50px)"
-  },
-  footer: {
-    width: "100%",
-    background: "#3f51b5",
-    height: "50px"
+    height: "calc(100vh - 50px)",
+    position:"relative"
   },
   toolbar: {
-    marginLeft: "50px",
-    paddingTop: "12px"
+    height: "50px",
+    // paddingTop: "12px",
+    background: varStyles.theme.colorMain    
   },
   toolbarButton: {
     color: "#fff", 
@@ -190,57 +191,14 @@ export class DesignBoard extends BaseComponent {
       />
     );
   }
-  renderToolbar() {
-    return (
-      <div style={styles.toolbar}>
-        <IconMenu
-          iconButtonElement={
-            <i className="material-icons" style={styles.toolbarButton}>add</i>
-          }
-          anchorOrigin={{ horizontal: "left", vertical: "top" }}
-          targetOrigin={{ horizontal: "left", vertical: "top" }}
-        >
-          <MenuItem
-            primaryText="Rectangle"
-            onClick={() => this.addShape(this.sample.addRect())}
-          />
-          <MenuItem
-            primaryText="Circle"
-            onClick={() => this.addShape(this.sample.addCircle())}
-          />
-          <MenuItem primaryText="Icon" />
-          <MenuItem primaryText="Text" />
-
-          <MenuItem
-            primaryText="Line Chart"
-            onClick={() => this.addShape(this.sample.addChart())}
-          />
-          <MenuItem
-            primaryText="Bar Chart"
-            onClick={() => this.addShape(this.sample.addBarChart())}
-          />
-          <MenuItem
-            primaryText="Area Chart"
-            onClick={() => this.addShape(this.sample.addAreaChart())}
-          />
-          <MenuItem
-            primaryText="Compose Chart"
-            onClick={() => this.addShape(this.sample.addComposeChart())}
-          />
-          <MenuItem
-            primaryText="Scatter Chart"
-            onClick={() => this.addShape(this.sample.addScatterChart())}
-          />
-        </IconMenu>
-        <i className="material-icons" style={styles.toolbarButton} onClick={this.showPropertyShape.bind(this)}>style</i>
-        <i className="material-icons" style={styles.toolbarButton} onClick={this.showPropertyChart.bind(this)}>mode_edit</i>
-      </div>
-    );
-  }
+  
 
   render() {
     return (
       <div>
+        <div style={styles.toolbar}>
+          <MenuButtonChartTypes onSelect={this.addShape.bind(this)} />
+        </div>
         <div
           style={styles.drawing}
           onMouseDown={this.mousedown.bind(this)}
