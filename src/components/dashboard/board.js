@@ -16,6 +16,7 @@ import { ProxyData } from "./../../base/proxy-data";
 import { PropertyView } from "./property-view";
 
 import { MenuButtonChartTypes } from "./menu-button-chart-types";
+import { ObjectHelper } from "../../base/object-helper";
 
 const styles = {
   body: {
@@ -23,17 +24,17 @@ const styles = {
     width: "100%",
     height: "calc(100vh - 50px)",
     position: "relative",
-    display:"flex"
+    display: "flex"
   },
-  drawing:{
+  drawing: {
     position: "relative",
-    width: "calc(100% - 200px)",    
-    height:"100%"
+    width: "calc(100% - 200px)",
+    height: "100%"
   },
-  property:{
+  property: {
     width: "200px",
     height: "100%",
-    background:varStyles.theme.colorLight
+    background: varStyles.theme.colorLight
   },
   toolbar: {
     height: "50px",
@@ -66,6 +67,7 @@ export class DesignBoard extends BaseComponent {
     this.state = {
       shapes: this.list,
       openProperty: false,
+      propertyWidth: 200,
       propertyMode: 1,
       selectedShapeView: null,
       selectedShape: null
@@ -151,6 +153,10 @@ export class DesignBoard extends BaseComponent {
     this.state.selectedShapeView.setChartData(chartData);
   }
 
+  propertyWidthChanged(width){
+    this.setState({propertyWidth: width});
+  }
+
   mousemove(e) {
     if (this.draggingShape) {
       this.draggingShape.mousemoveOutside(e);
@@ -214,38 +220,36 @@ export class DesignBoard extends BaseComponent {
         </div>
         <div style={styles.body}>
           <div
-            style={styles.drawing}
+            style={ObjectHelper.merge(styles.drawing,{width:`calc(100% - ${this.state.propertyWidth}px)`})}
             onMouseDown={this.mousedown.bind(this)}
             onMouseMove={this.mousemove.bind(this)}
             onMouseUp={this.mouseup.bind(this)}
           >
             {this.state.shapes.map(shape => this.renderShape(shape))}
           </div>
-          <div style={styles.property} >
-            <PropertyView shapeView={this.state.selectedShapeView} />
-          </div>
+          <PropertyView shapeView={this.state.selectedShapeView} onWidthChange={this.propertyWidthChanged.bind(this)}/>
         </div>
         {
-        // <Drawer
-        //   open={this.state.openProperty}
-        //   docked={true}
-        //   openSecondary={true}
-        //   width={400}
-        // >
-        //   {this.state.selectedShapeView &&
-        //   this.state.propertyMode === 1 && (
-        //     <ShapeProperty
-        //       onInit={e => this.ovrInitChild("propShapeView", e)}
-        //     />
-        //   )}
-        //   {this.state.selectedShapeView &&
-        //   this.state.propertyMode === 2 && (
-        //     <ChartProperty
-        //       onInit={e => this.ovrInitChild("propChartView", e)}
-        //       onChange={this.chartPropertyChanged.bind(this)}
-        //     />
-        //   )}
-        // </Drawer>
+          // <Drawer
+          //   open={this.state.openProperty}
+          //   docked={true}
+          //   openSecondary={true}
+          //   width={400}
+          // >
+          //   {this.state.selectedShapeView &&
+          //   this.state.propertyMode === 1 && (
+          //     <ShapeProperty
+          //       onInit={e => this.ovrInitChild("propShapeView", e)}
+          //     />
+          //   )}
+          //   {this.state.selectedShapeView &&
+          //   this.state.propertyMode === 2 && (
+          //     <ChartProperty
+          //       onInit={e => this.ovrInitChild("propChartView", e)}
+          //       onChange={this.chartPropertyChanged.bind(this)}
+          //     />
+          //   )}
+          // </Drawer>
         }
         {/* <div style={styles.footer}>{this.renderToolbar()}</div> */}
       </div>

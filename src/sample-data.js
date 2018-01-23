@@ -72,10 +72,10 @@ export class SampleData {
         name: "LineChart1",
         type: "PanLineChart",
         attributes: {
-          XAxis: "name",
+          XAxis: "ds2.name",
           YAxis: [
-            { dataKey: "uv", stroke: "#ff0000" },
-            { dataKey: "pv", stroke: "#00ff00" }
+            { dataKey: "ds2.uv", stroke: "#ff0000" },
+            { dataKey: "ds2.pv", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
         }
@@ -274,10 +274,10 @@ export class SampleData {
       inner: {
         type: "PanLineChart",
         attributes: {
-          XAxis: "name",
+          XAxis: "ds2.name",
           YAxis: [
-            { dataKey: "uv", stroke: "#ff0000" },
-            { dataKey: "pv", stroke: "#00ff00" }
+            { dataKey: "ds2.uv", stroke: "#ff0000" },
+            { dataKey: "ds2.pv", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
         }

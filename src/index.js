@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import './style.css';
+import './css/font-awesome.css';
 import { Main } from './components/main';
 import { WorkSpace } from './components/workspace';
 import { TestProperty} from './components/test-property';

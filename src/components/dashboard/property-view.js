@@ -9,7 +9,10 @@ import { ShapeProperty } from "./../shapes/shape-property";
 import { ObjectHelper } from "./../../base/object-helper";
 
 const styles = {
-  main: {},
+  main: {
+    background: varStyles.theme.colorLight,
+    color:"#fff"
+  },
   button: {
     cursor: "pointer",
     marginRight: "10px"
@@ -21,7 +24,8 @@ export class PropertyView extends BaseComponent {
     super(props);
     this.state = {
       tabIndex: 1,
-      shapeView: this.props.shapeView
+      shapeView: this.props.shapeView,
+      show: true
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -46,52 +50,83 @@ export class PropertyView extends BaseComponent {
     this.state.shapeView.setChartData(chartData);
   }
 
-  render() {
-    console.log("property-view", this.state.shapeView);
-    return (
-      <div>
-        <div>
-          <i
-            className="material-icons"
-            style={ObjectHelper.merge(styles.button, {
-              color:
-                this.state.tabIndex === 1
-                  ? varStyles.theme.textSelectedColor
-                  : varStyles.theme.textColor
-            })}
-            onClick={() => this.selectTab(1)}
-          >
-            style
-          </i>
-          <i
-            className="material-icons"
-            style={ObjectHelper.merge(styles.button, {
-              color:
-                this.state.tabIndex === 2
-                  ? varStyles.theme.textSelectedColor
-                  : varStyles.theme.textColor
-            })}
-            onClick={() => this.selectTab(2)}
-          >
-            mode_edit
-          </i>
-        </div>
-        {this.state.tabIndex === 1 &&
-        this.state.shapeView && (
-          <ShapeProperty
-            data={this.state.shapeView.styleCollection.output()}
-            onChange={this.shapePropertyChanged.bind(this)}
-          />
-        )}
-        {this.state.tabIndex === 2 &&
-        this.state.shapeView && (
-          <ChartProperty
+  toggleMenu() {
+    this.setState((prevState, props) => {
+      return {
+        show: !prevState.show
+      }
+    }, () => {
+      if (this.props.onWidthChange)
+        this.props.onWidthChange(this.getWidth());
+    });
+  }
+
+  getWidth() {
+    return this.state.show ? 300 : 30;
+  }
+
+  renderBody() {
+    if (this.state.show) {
+      let view = null;
+      if (this.state.shapeView) {
+        view = this.state.tabIndex === 1 ?
+          (
+            <ShapeProperty
+              data={this.state.shapeView.styleCollection.output()}
+              onChange={this.shapePropertyChanged.bind(this)}
+            />
+          ) :
+          (<ChartProperty
             data={this.state.shapeView.props.data.inner}
             declares={this.state.shapeView.chartView.declares()}
             onChange={this.chartPropertyChanged.bind(this)}
           />
-        )}
-        <div />
+          );
+      }
+      return (
+        <div>
+          <div>
+            <i
+              className="material-icons"
+              style={ObjectHelper.merge(styles.button, {
+                color:
+                  this.state.tabIndex === 1
+                    ? varStyles.theme.textSelectedColor
+                    : varStyles.theme.textColor
+              })}
+              onClick={() => this.selectTab(1)}
+            >
+              style
+          </i>
+            <i
+              className="material-icons"
+              style={ObjectHelper.merge(styles.button, {
+                color:
+                  this.state.tabIndex === 2
+                    ? varStyles.theme.textSelectedColor
+                    : varStyles.theme.textColor
+              })}
+              onClick={() => this.selectTab(2)}
+            >
+              mode_edit
+          </i>
+          </div>
+          {view}
+        </div>
+      );
+    }
+
+
+  }
+
+  render() {
+    console.log("property-view", this.state.shapeView);
+    return (
+      <div style={ObjectHelper.merge(styles.main, { width: this.getWidth() })}>
+      
+        <i className={this.state.show?"fa fa-bars":"fa fa-bars fa-rotate-90"} style={ObjectHelper.merge(styles.button, { position: "absolute", top: 5, right: -5, fontSize:20 })}
+          onClick={this.toggleMenu.bind(this)}></i>
+        {this.renderBody()}
       </div>
     );
   }

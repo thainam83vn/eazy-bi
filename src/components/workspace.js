@@ -139,7 +139,7 @@ export class WorkSpace extends BaseComponent {
         <div style={styles.footer} />
 
         <div style={styles.body}>
-          <SplitterLayout percentage="true" secondaryInitialSize="65">
+          <SplitterLayout percentage="true" secondaryInitialSize="80">
             <div style={styles.left}>
               <WorkspaceMenu
                 style={{

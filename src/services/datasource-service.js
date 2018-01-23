@@ -1,5 +1,6 @@
 import { ProxyData } from "./../base/proxy-data";
 import { BaseService } from "./base-service";
+import { Datasource } from "../models/datasource-model";
 
 export class DatasourceService extends BaseService {
   static _instance = null;
@@ -18,6 +19,14 @@ export class DatasourceService extends BaseService {
       this.datasources[name] = proxydata;
     }
     return this.datasources[name];
+  }
+
+  getDatasources(): Datasource[]{
+    let ds = [];
+    for(let k in this.datasources){
+      ds.push(this.datasources[k].data);
+    }
+    return ds;
   }
 
   getDatasourceNames(): string[]{
