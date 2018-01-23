@@ -12,7 +12,9 @@ import {
 import { Helper } from "./../lib/Helper";
 
 import varStyles from "./../var-styles";
+import "./workspace-menu.css";
 import { BaseComponent } from "./base-component";
+import { DialogService } from "./../services/dialog-service";
 
 const styles = {
   main: {}
@@ -30,6 +32,32 @@ export class WorkspaceMenu extends BaseComponent {
     this.setState({
       selected: obj
     });
+  }
+
+  addDashboard() {
+    DialogService.instance().prompt(
+      "New Dashboard",
+      "Dashboard Name",
+      "",
+      r => {
+        if (r) {
+          if (this.props.onCreateDashboard) this.props.onCreateDashboard(r);
+        }
+      }
+    );
+  }
+
+  addDatasource() {
+    DialogService.instance().prompt(
+      "New Datasource",
+      "Datasource Name",
+      "",
+      r => {
+        if (r) {
+          if (this.props.onCreateDatasource) this.props.onCreateDatasource(r);
+        }
+      }
+    );
   }
 
   dashboardClick(dashboard) {
@@ -54,9 +82,8 @@ export class WorkspaceMenu extends BaseComponent {
       //   <MenuItem value={dashboard.dashboardName} primaryText={dashboard.dashboardName}  />
       // );
       items.push(
-        <div
+        <li
           style={{
-            cursor: "pointer",
             color:
               this.state.selected === dashboard
                 ? this.props.style.textSelectedColor
@@ -65,19 +92,22 @@ export class WorkspaceMenu extends BaseComponent {
           onClick={() => this.dashboardClick(dashboard)}
         >
           {dashboard.dashboardName}
-        </div>
+        </li>
       );
     }
     return (
-      <Card style={{ background: this.props.style.background }}>
-        <CardHeader
-          title="Dashboard"
-          titleStyle={{ color: this.props.style.color }}
-        />
-        <CardText style={{ color: "#fff" }}>
-          <div style={{ color: "#fff", cursor: "pointer" }}>{items}</div>
-        </CardText>
-      </Card>
+      <div className="menu">
+        <div>
+          <span>Dashboards</span>
+          <i
+            className="material-icons button"
+            onClick={this.addDashboard.bind(this)}
+          >
+            add
+          </i>
+        </div>
+        <ul>{items}</ul>
+      </div>
     );
   }
 
@@ -89,30 +119,32 @@ export class WorkspaceMenu extends BaseComponent {
       //   <MenuItem value={dashboard.dashboardName} primaryText={dashboard.dashboardName}  />
       // );
       items.push(
-        <div
+        <li
           style={{
-            cursor:"pointer",
             color:
-            this.state.selected === datasource
+              this.state.selected === datasource
                 ? this.props.style.textSelectedColor
                 : this.props.style.textColor
           }}
           onClick={() => this.datasourceClick(datasource)}
         >
           {datasource.name}
-        </div>
+        </li>
       );
     }
     return (
-      <Card style={{ background: this.props.style.background }}>
-        <CardHeader
-          title="Datasets"
-          titleStyle={{ color: this.props.style.color }}
-        />
-        <CardText style={{ color: "#fff" }}>
-          <div style={{ color: "#fff" }}>{items}</div>
-        </CardText>
-      </Card>
+      <div className="menu">
+        <div>
+          <span>Datasets</span>
+          <i
+            className="material-icons button"
+            onClick={this.addDatasource.bind(this)}
+          >
+            add
+          </i>
+        </div>
+        <ul>{items}</ul>
+      </div>
     );
   }
 
@@ -121,9 +153,10 @@ export class WorkspaceMenu extends BaseComponent {
       <Card style={{ background: this.props.style.background }}>
         <CardHeader
           title={
-            <div style={{ whiteSpace: "nowrap" }}>{this.props.workspace.workspaceName}</div>
+            <div style={{ whiteSpace: "nowrap" }}>
+              {this.props.workspace.workspaceName}
+            </div>
           }
-          
           actAsExpander={true}
           showExpandableButton={true}
           titleStyle={{ color: this.props.style.color }}

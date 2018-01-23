@@ -83,6 +83,6 @@ export class ShapeProperty extends BaseComponent {
 }
 
 const StyleControlMapping = {
-  background: "ControlColorSelector",
-  color: "ControlColorSelector"
+  background: {type:"ControlColorSelector"},
+  color: {type:"ControlColorSelector"}
 };

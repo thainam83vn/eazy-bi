@@ -12,11 +12,16 @@ import {
 export class PanAreaChart extends BaseChart {
   declares() {
     return {
-      datasourceName: 'ControlDatasourceSelector',      
-      XAxis: 'ControlDataFieldSelector',
+      datasourceName: { type: "ControlDatasourceSelector" },
+      XAxis: {
+        type: "ControlDataFieldSelector"
+      },
       YAxis: [
-        { dataKey: "ControlDataFieldSelector", fill: "ControlColorSelector" },
-      ],
+        {
+          dataKey: { type: "ControlDataFieldSelector" },
+          fill: { type: "ControlColorSelector" }
+        }
+      ]
     };
   }
   render() {
@@ -32,7 +37,12 @@ export class PanAreaChart extends BaseChart {
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
         {this.state.attributes.YAxis.map(yaxis => (
-          <Area type="monotone" dataKey={yaxis.dataKey} stroke={yaxis.stroke} fill={yaxis.fill} />
+          <Area
+            type="monotone"
+            dataKey={yaxis.dataKey}
+            stroke={yaxis.stroke}
+            fill={yaxis.fill}
+          />
         ))}
       </AreaChart>
     );

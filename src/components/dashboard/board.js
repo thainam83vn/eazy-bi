@@ -107,22 +107,6 @@ export class DesignBoard extends BaseComponent {
     if (this.props.onShapeSelected) this.props.onShapeSelected(shapeView);
   }
 
-  // selectShapeViewForShapeProperty() {
-  //   // if (this.propShapeView) this.propShapeView.setShape(this.selectedShapeView);
-  //   if (this.propShapeView)
-  //     this.propShapeView.setShape(this.state.selectedShapeView);
-  // }
-
-  // selectShapeViewForChartProperty() {
-  //   if (this.propChartView)
-  //     this.propChartView.setChart(
-  //       this.state.selectedShapeView.props.data.chart,
-  //       this.state.selectedShapeView.chart
-  //         ? this.state.selectedShapeView.chart.declares()
-  //         : null
-  //     );
-  // }
-
   addShape(shape) {
     shape.id = this.list.length + 1;
     this.list.push(shape);

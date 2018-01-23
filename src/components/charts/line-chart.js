@@ -11,13 +11,18 @@ import {
 } from "recharts";
 
 export class PanLineChart extends BaseChart {
-  declares(){
+  declares() {
     return {
-      datasourceName: 'ControlDatasourceSelector',      
-      XAxis: 'ControlDataFieldSelector',
+      datasourceName: { type: "ControlDatasourceSelector" },
+      XAxis: {
+        type: "ControlDataFieldSelector"
+      },
       YAxis: [
-        { dataKey: "ControlDataFieldSelector", stroke: "ControlColorSelector" },
-      ],
+        {
+          dataKey: { type: "ControlDataFieldSelector" },
+          stroke: { type: "ControlColorSelector" }
+        }
+      ]
     };
   }
   render() {

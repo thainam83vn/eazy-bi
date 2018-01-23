@@ -16,7 +16,7 @@ export class ControlForm extends BaseComponent {
     this.state = {
       declares: this.props.declares,
       data: this.props.data
-    };
+    };  
   }
   valueChanged(e) {
     let newDatasourceName = null;
@@ -36,9 +36,7 @@ export class ControlForm extends BaseComponent {
     console.log("data change:", this.state.data);
   }
   renderRecursive(fieldName, atts, data) {
-    if (typeof atts === "string") {
-      // let Control = components[atts];
-      // return <Control key={atts} attributes={{name:atts, value: data}} />;
+    if (atts.type) {
       return (
         <ControlDynamic
           key={fieldName}
@@ -46,7 +44,8 @@ export class ControlForm extends BaseComponent {
           attributes={{
             name: fieldName,
             value: data,
-            control: atts,
+            control: atts.type,
+            params: atts.params,
             datasourceName: this.datasourceName,
             onDatasourceChange: this.onDatasourceChange
           }}
@@ -65,7 +64,7 @@ export class ControlForm extends BaseComponent {
           }}
         />
       );
-    } else if (typeof atts === "object") {
+    } else {
       let ls = [];
       for (let attKey in atts) {
         let attValue = atts[attKey];
@@ -76,6 +75,45 @@ export class ControlForm extends BaseComponent {
       }
       return <div className={fieldName}>{ls}</div>;
     }
+
+    // if (typeof atts === "string") {
+    //   return (
+    //     <ControlDynamic
+    //       key={fieldName}
+    //       onChange={this.valueChanged.bind(this)}
+    //       attributes={{
+    //         name: fieldName,
+    //         value: data,
+    //         control: atts,
+    //         datasourceName: this.datasourceName,
+    //         onDatasourceChange: this.onDatasourceChange
+    //       }}
+    //     />
+    //   );
+    // } else if (typeof atts === "object" && atts.length) {
+    //   return (
+    //     <ControlArray
+    //       onChange={this.valueChanged.bind(this)}
+    //       attributes={{
+    //         name: fieldName,
+    //         declares: atts,
+    //         data: data,
+    //         datasourceName: this.datasourceName,
+    //         onDatasourceChange: this.onDatasourceChange
+    //       }}
+    //     />
+    //   );
+    // } else if (typeof atts === "object") {
+    //   let ls = [];
+    //   for (let attKey in atts) {
+    //     let attValue = atts[attKey];
+    //     if (attValue) {
+    //       let dataValue = data[attKey];
+    //       ls.push(this.renderRecursive(attKey, attValue, dataValue));
+    //     }
+    //   }
+    //   return <div className={fieldName}>{ls}</div>;
+    // }
   }
 
   render() {

@@ -22,7 +22,7 @@ export class ControlSelectMini extends BaseControl {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        {this.props.attributes.options.map(option => (
+        {this.props.attributes.params.options.map(option => (
           <MenuItem value={this.props.valueField ? option[[this.props.valueField]] : option[[StrValueField]]} 
           primaryText={this.props.textField ? option[[this.props.textField]] : option[[StrTextField]]} 
           onClick={() => this.valueChanged(this.props.valueField ? option[[this.props.valueField]] : option[[StrValueField]])} />

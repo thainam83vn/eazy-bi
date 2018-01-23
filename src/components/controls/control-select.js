@@ -13,7 +13,7 @@ export class ControlSelect extends BaseControl {
         value={this.state.value}
         onChange={(event, index, value) => this.valueChanged(value)}
       >
-        {this.props.attributes.options.map(option => (
+        {this.props.attributes.params.options.map(option => (
           <MenuItem value={option.value} primaryText={option.text} />
         ))}
       </SelectField>

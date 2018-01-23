@@ -1,0 +1,12 @@
+.menu{
+
+}
+
+.menu ul li{
+  cursor: pointer;
+  padding: 2px;
+}
+
+.menu ul li:hover{
+  background: #000000;
+}

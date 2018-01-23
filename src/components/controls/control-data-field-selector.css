@@ -1,0 +1,24 @@
+.tables-fields{
+  width: 150px;
+  background: #484848;
+  color: #fff;
+}
+
+.tables-fields ul.table {
+}
+
+.tables-fields ul.table li.field {
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  padding: 1px 5px 1px 5px;
+}
+.tables-fields ul.table li.field:hover {
+  background: #212121;
+}
+
+.tables-fields ul.table li.field > .check {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+}

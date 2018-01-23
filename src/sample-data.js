@@ -48,7 +48,8 @@ export class SampleData {
     let datasources = {
       ds1:new Datasource(this.datasourceSampleCSV1("ds1")),
       ds2:new Datasource(this.datasourceSampleCSV2("ds2")),
-      ds3:new Datasource(this.datasourceSampleCSV3("ds3"))
+      ds3: new Datasource(this.datasourceSampleCSV3("ds3")),
+      rest1:new Datasource(this.datasourceSampleRest1("rest1")),
     };
     return new DashboardModel({
       workspaceName: name,
@@ -72,10 +73,10 @@ export class SampleData {
         name: "LineChart1",
         type: "PanLineChart",
         attributes: {
-          XAxis: "ds2.name",
+          XAxis: "name",
           YAxis: [
-            { dataKey: "ds2.uv", stroke: "#ff0000" },
-            { dataKey: "ds2.pv", stroke: "#00ff00" }
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
         }
@@ -86,6 +87,20 @@ export class SampleData {
       items: [item1]
     });
   }
+
+  datasourceSampleRest1(name) {
+    return {
+      name: name,
+      setting: {
+        type: 'rest',
+        url:'https://facebook.github.io/react-native/movies.json',
+        method:'GET',
+        path:'movies',
+        body:''
+      }
+    }
+  }
+
   datasourceSampleCSV1(name) {
     let c = `year,boys,girls
         1629,5218,4683
@@ -274,10 +289,10 @@ export class SampleData {
       inner: {
         type: "PanLineChart",
         attributes: {
-          XAxis: "ds2.name",
+          XAxis: "name",
           YAxis: [
-            { dataKey: "ds2.uv", stroke: "#ff0000" },
-            { dataKey: "ds2.pv", stroke: "#00ff00" }
+            { dataKey: "uv", stroke: "#ff0000" },
+            { dataKey: "pv", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
         }

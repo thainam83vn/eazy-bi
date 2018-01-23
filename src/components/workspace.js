@@ -2,6 +2,7 @@ import React from "react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import FloatingActionButton from "material-ui/FloatingActionButton";
+import FlatButton from "material-ui/FlatButton";
 import SplitterLayout from "react-splitter-layout";
 
 import varStyles from "./../var-styles";
@@ -91,7 +92,7 @@ export class WorkSpace extends BaseComponent {
   selectDatasource(e) {
     this.setState({
       selectedDashboard: null,
-      selectedDatasource: null      
+      selectedDatasource: null
     });
     setTimeout(() => {
       this.setState({
@@ -100,43 +101,42 @@ export class WorkSpace extends BaseComponent {
     }, 50);
   }
 
-  addDashboard() {
-    console.log("addDashboard");
-    DialogService.instance().prompt(
-      "New Dashboard",
-      "Dashboard Name",
-      "",
-      r => {
-        if (r) {
-          if (this.dashboards[r]) {
-            DialogService.instance().alert(
-              "Invalid Dashboard Name",
-              `Name ${r} is not available`,
-              () => {
-                this.addDashboard();
-              }
-            );
-          } else {
-            let dashboard = sample.dashboardSample1(r);
-            this.dashboards[r] = dashboard;
-            this.selectDashboard(r);
-          }
-        }
-      }
-    );
+  createDashboard(name) {
+    let dashboard = sample.dashboardSample1(name);
+    this.selectedWorkspace.dashboards[name] = dashboard;
+    this.selectDashboard(dashboard);
+  }
+
+  createDatasource(name) {
+    let datasource = new Datasource(sample.datasourceSampleCSV1(name));
+    this.selectedWorkspace.datasources[name] = datasource;
+    this.selectDatasource(datasource);
   }
 
   boardChanged(dashboard) {
     console.log("BoardChanged:", this.dashboards, dashboard);
   }
 
-  datasourceChanged(ds) {
+  datasourceChanged(ds) {}
+
+  showHomeDialog(){
+    DialogService.instance().alert(
+      "Test",
+      "Go home",
+      () => { }
+    );
   }
 
   render() {
     return (
       <div style={styles.main}>
-        <div style={styles.footer} />
+        <div style={styles.footer}>
+          <FlatButton
+            onClick={this.showHomeDialog.bind(this)}
+          >
+            Home
+          </FlatButton>
+        </div>
 
         <div style={styles.body}>
           <SplitterLayout percentage="true" secondaryInitialSize="80">
@@ -150,6 +150,8 @@ export class WorkSpace extends BaseComponent {
                 workspace={this.selectedWorkspace}
                 onSelectDashboard={this.selectDashboard.bind(this)}
                 onSelectDatasource={this.selectDatasource.bind(this)}
+                onCreateDashboard={this.createDashboard.bind(this)}
+                onCreateDatasource={this.createDatasource.bind(this)}
               />
             </div>
             <div style={styles.right}>
@@ -162,7 +164,7 @@ export class WorkSpace extends BaseComponent {
               )}
               {this.state.selectedDatasource && (
                 <DatasourceView
-                  style={{ headerBackground: varStyles.theme.colorMain}}
+                  style={{ headerBackground: varStyles.theme.colorMain }}
                   datasource={this.state.selectedDatasource}
                 />
               )}

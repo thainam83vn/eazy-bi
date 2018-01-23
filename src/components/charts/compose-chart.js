@@ -16,11 +16,16 @@ import { PanChartItem } from "./chart-item";
 export class PanComposeChart extends BaseChart {
   declares() {
     return {
-      datasourceName: 'ControlDatasourceSelector',      
-      XAxis: 'ControlDataFieldSelector',
+      datasourceName: { type: "ControlDatasourceSelector" },
+      XAxis: {
+        type: "ControlDataFieldSelector"
+      },
       YAxis: [
-        { dataKey: "ControlDataFieldSelector", fill: "ControlColorSelector" },
-      ],
+        {
+          dataKey: { type: "ControlDataFieldSelector" },
+          fill: { type: "ControlColorSelector" }
+        }
+      ]
     };
   }
   renderItem(yaxis) {

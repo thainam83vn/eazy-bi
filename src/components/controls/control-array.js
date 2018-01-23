@@ -66,7 +66,7 @@ export class ControlArray extends BaseControl {
     for (let row of this.state.attributes.data) {
       let rowControl = [];
       for (let field in this.state.attributes.declares[0]) {
-        let controlName = this.state.attributes.declares[0][field];
+        let controlName = this.state.attributes.declares[0][field].type;
         let value = row[field];
         rowControl.push(
           <ControlDynamic

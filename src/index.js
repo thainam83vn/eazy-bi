@@ -5,7 +5,9 @@ import './css/font-awesome.css';
 import { Main } from './components/main';
 import { WorkSpace } from './components/workspace';
 import { TestProperty} from './components/test-property';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+import {DialogContainer} from './components/dialog-container';
 
 const styles = {
   fontFamily: 'sans-serif',
@@ -16,6 +18,7 @@ const styles = {
 const App = () => (
   <MuiThemeProvider>
     <WorkSpace  />
+    <DialogContainer />
   </MuiThemeProvider>
 );
 

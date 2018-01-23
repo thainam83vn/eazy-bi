@@ -10,7 +10,6 @@ export class BaseChart extends BaseComponent {
   constructor(props) {
     super(props);
     this.ovrDeclareAttributes();
-    let arrData = this.props.attributes.
     this.proxyData = DatasourceService.instance().getDatasource(
       this.props.attributes.datasourceName
     );

@@ -4,6 +4,7 @@ import MenuItem from "material-ui/MenuItem";
 
 import { BaseComponent } from "./../base-component";
 import { CsvSetting } from "./csv-setting";
+import { RestSetting } from "./rest-setting";
 import { Datasource } from "./../../models/datasource-model";
 
 const styles = {
@@ -28,14 +29,15 @@ export class DatasourceSetting extends BaseComponent {
     });
   }
   updateField(name, value) {
-    console.log("updateField:", name, value);
     
     this.setState((prevState, props) => {
-      prevState.datasource.setSetting(name, value);
-      if (this.props.onChange) this.props.onChange(prevState.datasource);      
+      prevState.datasource.setSetting({[name]: value});
       return {
         datasource: prevState.datasource
       };
+    }, ()=>{
+      console.log("updateField:", name, value, this.state.datasource);
+      if (this.props.onChange) this.props.onChange(this.state.datasource);            
     });
   }
   // updateSettingCsv(csvStr) {
@@ -55,6 +57,15 @@ export class DatasourceSetting extends BaseComponent {
         <CsvSetting
           csv={this.state.datasource.setting.fileContent}
           onChange={csvStr => this.updateField("fileContent", csvStr)}
+        />
+      );
+    }
+    if (this.state.datasource.setting.type === "rest") {
+      return (
+        <RestSetting
+          datasource={this.state.datasource}
+          setting={this.state.datasource.setting}
+          onChange={changes => this.updateField(changes)}
         />
       );
     }
