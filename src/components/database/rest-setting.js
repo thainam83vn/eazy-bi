@@ -1,5 +1,5 @@
 import React from "react";
-import FlatButton from "material-ui/FlatButton";
+import RaisedButton from "material-ui/RaisedButton";
 import JSONTree from 'react-json-tree';
 
 import { BaseComponent } from "./../base-component";
@@ -59,7 +59,7 @@ export class RestSetting extends BaseComponent {
           data={this.state.setting}
           onChange={this.formChanged.bind(this)}
         />
-        <FlatButton onClick={this.callRest.bind(this)}>Call</FlatButton>
+        <RaisedButton onClick={this.callRest.bind(this)} primary={true}>Call Url</RaisedButton>
         <div style={{ boder: "1px solid #3d3d3d", color: "#3d3d3d" }}>
           <JSONTree data={this.state.restResult} />
         </div>

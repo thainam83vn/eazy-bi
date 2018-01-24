@@ -34,11 +34,12 @@ export class Uploader extends BaseComponent {
       <section>
         <div className="dropzone">
           <Dropzone onDrop={this.onDrop.bind(this)}>
-            <p>
+            <p style={{color:"#3d3d3d"}}>
               Try dropping some files here, or click to select files to upload.
             </p>
           </Dropzone>
         </div>
+        <br/>
         <aside>
           {this.state.file}
         </aside>

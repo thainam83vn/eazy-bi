@@ -1,8 +1,11 @@
 import { BaseModel } from "./base-model";
 import { JsonHelper } from "./../base/json-helper";
 import { HttpService } from "./../services/http-service";
+import { EventEmitter } from "../base/event-emitter";
 
 export class Datasource extends BaseModel {
+  onChange:EventEmitter = new EventEmitter();
+
   name: string;
   setting: any;
   data = [];
@@ -20,6 +23,7 @@ export class Datasource extends BaseModel {
       JsonHelper.csvtojson(csv, json => {
         this.data = json;
         if (callback) callback(this.data);
+        this.onChange.emit(this.data);
       });
     }
     if (this.setting.type === "rest") {
@@ -35,6 +39,7 @@ export class Datasource extends BaseModel {
               r = r[pathItem];
               if (!r) {
                 if (callback) callback(r);
+                this.onChange.emit(this.data);
                 return;
               }
             }
@@ -52,6 +57,7 @@ export class Datasource extends BaseModel {
           };
           this.data = data;
           if (callback) callback(data);
+          this.onChange.emit(this.data);          
         });
     }
   }

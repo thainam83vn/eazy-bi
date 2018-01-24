@@ -1,5 +1,11 @@
-.menu{
-
+.menu > div{
+  position: relative;
+}
+.menu > div > i{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
 }
 
 .menu ul li{

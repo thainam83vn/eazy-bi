@@ -13,6 +13,7 @@ export class ControlDynamic extends BaseControl {
         style={this.props.style}
         onChange={this.valueChanged.bind(this)}
         key={this.props.attributes.name}
+        mini={this.props.mini}
         attributes={this.props.attributes}
       />
     );

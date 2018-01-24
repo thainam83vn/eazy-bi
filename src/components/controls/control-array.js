@@ -11,10 +11,10 @@ const styles = {
   main: {
     border: "1px solid #adadad"
   },
-  row:{
-    border:"none",
-    borderBottom:"1px solid #adadad",
-    position:'relative'
+  row: {
+    border: "none",
+    borderBottom: "1px solid #adadad",
+    position: 'relative'
   },
   item: {
     width: 100
@@ -28,7 +28,7 @@ export class ControlArray extends BaseControl {
       attributes: this.props.attributes
     };
   }
-  emitOnChange(){
+  emitOnChange() {
     if (this.props.onChange)
       this.props.onChange({
         [this.props.attributes.name]: this.state.attributes.data
@@ -40,7 +40,7 @@ export class ControlArray extends BaseControl {
       newrow[key] = "";
     }
     this.state.attributes.data.push(newrow);
-    this.setState({ attributes: this.state.attributes }, ()=>{
+    this.setState({ attributes: this.state.attributes }, () => {
       this.emitOnChange();
     });
   }
@@ -48,7 +48,7 @@ export class ControlArray extends BaseControl {
     for (let i = 0; i < this.props.attributes.data.length; i++) {
       if (this.props.attributes.data[i] === row) {
         this.props.attributes.data.splice(i, 1);
-        this.setState({ attributes: this.state.attributes }, ()=>{
+        this.setState({ attributes: this.state.attributes }, () => {
           this.emitOnChange();
         });
         return;
@@ -71,8 +71,9 @@ export class ControlArray extends BaseControl {
         rowControl.push(
           <ControlDynamic
             key={field}
-            style={{width:100}}
+            style={{ width: 100 }}
             onChange={e => this.itemChanged(row, e)}
+            mini={true}
             attributes={{
               name: field,
               value: value,
@@ -85,44 +86,42 @@ export class ControlArray extends BaseControl {
         );
       }
       result.push(
-        <div style={styles.row}>
+        <div className="control-array-row">
           {rowControl}
-          <IconButton style={{position:"absolute", top: 0, right: 0}} onClick={() => this.removeRow(row)}>
+          <IconButton style={{ position: "absolute", top: 0, right: 0 }} onClick={() => this.removeRow(row)}>
             <i className="material-icons">delete</i>
           </IconButton>
         </div>
       );
     }
     return (
-      <Card style={this.props.style}>
-        <CardHeader
-          title={
-            <div>
-              <span>{this.state.attributes.name}</span>
-              {/* <FlatButton onClick={this.addRow.bind(this)} label="Add" />         */}
-              <IconButton style={{position:"absolute", top: 0, right: 0}} onClick={this.addRow.bind(this)} >
-                <i className="material-icons">add</i>
-              </IconButton>
-            </div>
-          }
-          // actAsExpander={true}
-          // showExpandableButton={true}
-        />        
-        <CardText 
-        // expandable={true}
-        >
-          {result}
-          {/* <FlatButton onClick={this.addRow.bind(this)} label="Add" /> */}
-        </CardText>
-      </Card>
+      <div style={this.props.style} className="control-array">
+        <IconButton style={{ position: "absolute", top: -15, right: -15 }} onClick={this.addRow.bind(this)} >
+          <i className="material-icons">add</i>
+        </IconButton>
+
+        <div className="control-array-title">{this.props.attributes.name}
+        </div>
+        <div className="control-array-all-rows">{result}</div>
+      </div>
+      // <Card style={this.props.style}>
+      //   <CardHeader
+      //     title={
+      //       <div>
+      //         <span>{this.state.attributes.name}</span>
+      //         <IconButton style={{position:"absolute", top: 0, right: 0}} onClick={this.addRow.bind(this)} >
+      //           <i className="material-icons">add</i>
+      //         </IconButton>
+      //       </div>
+      //     }
+      //   />        
+      //   <CardText 
+      //   >
+      //     {result}
+      //   </CardText>
+      // </Card>
     );
+   
   }
 }
 
-{/* <div style={styles.main}>
-        <div style={styles.header}>{this.state.attributes.name}</div>
-        
-        <FloatingActionButton mini={true} onClick={this.addRow.bind(this)}>
-          <i className="material-icons">add</i>
-        </FloatingActionButton>
-      </div> */}

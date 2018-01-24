@@ -1,3 +1,17 @@
+.datafield-selector {
+  min-width: 75px;
+}
+.datafield-selector > div{
+}
+.datafield-selector .button{
+  margin-top:8px;
+  min-height: 27px;
+  
+  background: #212121;
+  cursor: pointer;
+  padding: 3px 10px 3px 10px;
+}
+
 .tables-fields{
   width: 150px;
   background: #484848;

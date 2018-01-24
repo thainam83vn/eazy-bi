@@ -49,9 +49,16 @@ export class ControlDatasourceSelector extends BaseControl {
     }
 
     return (
-      <div>
-        <div>{this.props.attributes.name}</div>
-        <RaisedButton
+      <div className="datasource-selector">
+        {this.props.mini != true && <div>{this.props.attributes.name}</div>}
+        <div className="button" onClick={this.handleClick}>{
+          this.state.value ? (
+            this.state.value
+          ) : (
+              this.props.attributes.name
+            )
+        }</div>
+        {/* <RaisedButton
           onClick={this.handleClick}
           label={
             this.state.value ? (
@@ -60,7 +67,7 @@ export class ControlDatasourceSelector extends BaseControl {
                 this.props.attributes.name
               )
           }
-        />
+        /> */}
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
@@ -74,7 +81,7 @@ export class ControlDatasourceSelector extends BaseControl {
       </div>
     );
   }
-  
+
   // render() {
   //   return <ControlSelect style={this.props.style} onChange={(e) => this.valueChanged(e[this.state.attributes.name])} attributes={this.state.attributes} />;
   // }

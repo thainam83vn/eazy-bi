@@ -39,6 +39,12 @@ export class WorkspaceMenu extends BaseComponent {
       "New Dashboard",
       "Dashboard Name",
       "",
+      r=>{
+        if (this.props.workspace.dashboards[r]){
+          return [`Dashboard name ${r} is not available`];
+        }
+        return [];
+      },
       r => {
         if (r) {
           if (this.props.onCreateDashboard) this.props.onCreateDashboard(r);
@@ -52,6 +58,12 @@ export class WorkspaceMenu extends BaseComponent {
       "New Datasource",
       "Datasource Name",
       "",
+      r=>{
+        if (this.props.workspace.datasources[r]){
+          return [`Datasource name ${r} is not available`];
+        }
+        return [];
+      },
       r => {
         if (r) {
           if (this.props.onCreateDatasource) this.props.onCreateDatasource(r);

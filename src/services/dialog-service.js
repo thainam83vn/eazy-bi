@@ -82,12 +82,13 @@ export class DialogService extends BaseService {
     this.onShowDialog.emit(dialog);
   }
 
-  prompt(title, message, value, callback) {
+  prompt(title, message, value, validator, callback) {
     let dialog = (
       <PromptDialog
         title={title}
         message={message}
         value={value}
+        validator={validator}
         callback={r => callback(r)}
         onCloseDialog={() => this.onCloseDialog.emit()}
       />
@@ -147,16 +148,17 @@ export class DialogService extends BaseService {
 export class PromptDialog extends React.Component {
   state = {
     promptInput: null,
-    errors: null
+    errors: []
   };
   handleChange(e) {
     this.state.promptInput = e.input;
-    // if (this.props.validator) {
-    //   this.setState({ errors: this.props.validator(this.state.promptInput) });
-    // }
+    if (this.props.validator) {
+      let errors = this.props.validator(this.state.promptInput);
+      if (errors!==this.state.errors)
+        this.setState({ errors: errors });
+    }
   }
   handleClose(r) {
-    debugger;
     if (this.props.callback) this.props.callback(r);
     // delete this.state.promptInput;
     this.props.onCloseDialog();
@@ -185,6 +187,14 @@ export class PromptDialog extends React.Component {
       />
     );
 
+    let errorMessages = (
+      <ul style={{color:"#ff00000"}}>
+        {this.state.errors.map(error => 
+          <li>{error}</li>
+        )}
+      </ul>
+    );
+
     let dialog = (
       <Dialog
         title={this.props.title}
@@ -194,6 +204,7 @@ export class PromptDialog extends React.Component {
         onRequestClose={() => this.handleClose(null)}
       >
         {body}
+        {errorMessages}
       </Dialog>
     );
     return dialog;

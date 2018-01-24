@@ -13,15 +13,49 @@
   background-color: #212121;
 }
 
-body {
+body,div {
   margin: 0px;
-  font-family: "Roboto, sans-serif";
+  font-family: Roboto, sans-serif;
+  color:#fff;
 }
 
 ul{
   list-style: none;
   padding: 5px 10px 5px 10px;
   margin: 0px;
+}
+
+.formControl{
+  display: grid;
+}
+
+.formControl > div{
+  margin-bottom: 10px;
+}
+
+.control-array{
+  position: relative;
+}
+
+.control-array > i{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.control-array > .control-array-all-rows{
+  margin-top: 10px;
+}
+.control-array > .control-array-all-rows > .control-array-row{
+  display: inline-flex;
+  width: 100%;
+  border: 1px solid;
+  margin-bottom: 5px;
+  padding: 3px;
+  position: relative;
+}
+
+.control-array > .control-array-all-rows > .control-array-row>div{
+  margin-right: 5px;
 }
 
 .splitter-layout {

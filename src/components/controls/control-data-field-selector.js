@@ -69,17 +69,13 @@ export class ControlDataFieldSelector extends BaseControl {
       </li>
     );
     cards.push(card);
-
     return (
-      <div>
-        <div>{this.props.attributes.name}</div>
+      <div className="datafield-selector">
+        {this.props.mini!=true&&<div>{this.props.attributes.name}</div>}
         <div>
-          <RaisedButton
-            onClick={this.handleClick}
-            label={
+          <div className="button" onClick={this.handleClick}>{
               this.state.value ? this.state.value : this.props.attributes.name
-            }
-          />
+            }</div>
           <Popover
             open={this.state.open}
             anchorEl={this.state.anchorEl}

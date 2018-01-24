@@ -22,6 +22,9 @@ export class DatasourceData extends BaseComponent {
 
   refresh(ds) {
     this.datasource = ds;
+    this.datasource.onChange.subcribe(()=>{
+      this.refreshData();
+    });
     this.refreshData();
   }
 
@@ -29,11 +32,6 @@ export class DatasourceData extends BaseComponent {
     this.setState({
       table: this.datasource.data
     });
-    // this.datasource.toJson(table=>{
-    //   this.setState({
-    //     table: table
-    //   });
-    // });
   }
 
   setDatasource(d: Datasource) {
@@ -56,7 +54,7 @@ export class DatasourceData extends BaseComponent {
             {this.state.table.rows.map(r => (
               <TableRow key={r.index}>
                 {this.state.table.header.map(h => (
-                  <TableRowColumn key={h + r.index}>{r[h]}</TableRowColumn>
+                  <TableRowColumn key={h + r.index}>{typeof r[h]==="object"?JSON.stringify(r[h]):r[h]}</TableRowColumn>
                 ))}
               </TableRow>
             ))}

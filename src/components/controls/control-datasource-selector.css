@@ -1,3 +1,9 @@
+.datasource-selector .button{
+  height: 25px;
+  background: #212121;
+  cursor: pointer;
+  padding: 3px 10px 3px 10px;
+}
 .tables{
   width: 150px;
   background: #484848;
