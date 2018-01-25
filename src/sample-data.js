@@ -1,4 +1,4 @@
-import { Datasource} from "./models/datasource-model";
+import { Datasource } from "./models/datasource-model";
 import { DashboardModel } from "./models/dashboard-model";
 import { EntityModel } from "./models/entity-model";
 import { DashboardItemModel } from "./models/dashboard-item-model";
@@ -15,9 +15,9 @@ const data = [
 ];
 
 export class SampleData {
-  entitiesSample(){
+  entitiesSample() {
     return {
-      LineChart1:new EntityModel({
+      LineChart1: new EntityModel({
         name: "LineChart1",
         type: "PanLineChart",
         attributes: {
@@ -29,7 +29,7 @@ export class SampleData {
           datasourceName: "ds2"
         }
       }),
-      BarChart1:new EntityModel({
+      BarChart1: new EntityModel({
         name: "BarChart1",
         type: "PanBarChart",
         attributes: {
@@ -43,13 +43,16 @@ export class SampleData {
       })
     };
   }
-  workspaceSample1(name):WorkspaceModel {
-    let dashboards = {dashboard1:new this.dashboardSample1("dashboard1")};
+  workspaceSample1(name): WorkspaceModel {
+    let dashboards = {
+      dashboard1: new this.dashboardSample1("dashboard1"),
+      dashboard2: new this.dashboardSample2("dashboard2")
+    };
     let datasources = {
-      ds1:new Datasource(this.datasourceSampleCSV1("ds1")),
-      ds2:new Datasource(this.datasourceSampleCSV2("ds2")),
+      ds1: new Datasource(this.datasourceSampleCSV1("ds1")),
+      ds2: new Datasource(this.datasourceSampleCSV2("ds2")),
       ds3: new Datasource(this.datasourceSampleCSV3("ds3")),
-      rest1:new Datasource(this.datasourceSampleRest1("rest1")),
+      rest1: new Datasource(this.datasourceSampleRest1("rest1"))
     };
     return new DashboardModel({
       workspaceName: name,
@@ -60,7 +63,7 @@ export class SampleData {
   dashboardSample1(name) {
     let item1 = new DashboardItemModel({
       id: 1,
-      type:"ChartShape",
+      type: "ChartShape",
       style: {
         background: "#3d3d3d",
         color: "#afafaf",
@@ -88,17 +91,61 @@ export class SampleData {
     });
   }
 
+  dashboardSample2(name) {
+    let item1 = new DashboardItemModel({
+      id: 1,
+      type: "ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 250,
+        height: 250,
+        left: 0,
+        top: 200
+      },
+      inner: new EntityModel({
+        type: "TableChart",
+        attributes: {
+          datasourceName: "ds2"
+        }
+      })
+    });
+    let item2 = new DashboardItemModel({
+      id: 2,
+      type: "ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 250,
+        height: 150,
+        left: 0,
+        top: 0
+      },
+      inner: new EntityModel({
+        type: "SlicerChart",
+        attributes: {
+          datasourceName: "ds2",
+          field: "name"
+        }
+      })
+    });
+    return new DashboardModel({
+      dashboardName: name,
+      items: [item1, item2]
+    });
+  }
+
   datasourceSampleRest1(name) {
     return {
       name: name,
       setting: {
-        type: 'rest',
-        url:'https://facebook.github.io/react-native/movies.json',
-        method:'GET',
-        path:'movies',
-        body:''
+        type: "rest",
+        url: "https://facebook.github.io/react-native/movies.json",
+        method: "GET",
+        path: "movies",
+        body: ""
       }
-    }
+    };
   }
 
   datasourceSampleCSV1(name) {
@@ -112,12 +159,12 @@ export class SampleData {
     return {
       name: name,
       setting: {
-        type: 'csv',
-        fileName: 'f1.csv',
+        type: "csv",
+        fileName: "f1.csv",
         fileContent: c,
-        desc: 'Datasource Sample CSV 1'
+        desc: "Datasource Sample CSV 1"
       }
-    }
+    };
   }
 
   datasourceSampleCSV2(name) {
@@ -133,12 +180,12 @@ export class SampleData {
     return {
       name: name,
       setting: {
-        type: 'csv',
-        fileName: 'f2.csv',
+        type: "csv",
+        fileName: "f2.csv",
         fileContent: c,
-        desc: 'Datasource Sample CSV 2'
+        desc: "Datasource Sample CSV 2"
       }
-    }
+    };
   }
 
   datasourceSampleCSV3(name) {
@@ -155,14 +202,13 @@ export class SampleData {
     return {
       name: name,
       setting: {
-        type: 'csv',
-        fileName: 'f3.csv',
+        type: "csv",
+        fileName: "f3.csv",
         fileContent: c,
-        desc: 'Datasource Sample CSV 3'
+        desc: "Datasource Sample CSV 3"
       }
-    }
+    };
   }
-
 
   shapeList() {
     return [
@@ -275,6 +321,26 @@ export class SampleData {
     };
   }
 
+  addTableChart() {
+    return {
+      type: "ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 250,
+        height: 250,
+        left: 0,
+        top: 0
+      },
+      inner: {
+        type: "TableChart",
+        attributes: {
+          datasourceName: "ds2"
+        }
+      }
+    };
+  }
+
   addChart() {
     return {
       type: "ChartShape",
@@ -320,8 +386,7 @@ export class SampleData {
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
-
-        },
+        }
       }
     };
   }
@@ -346,8 +411,7 @@ export class SampleData {
             { dataKey: "pv", fill: "#00ff00", stroke: "#00ff00" }
           ],
           datasourceName: "ds2"
-
-        },
+        }
       }
     };
   }
@@ -373,8 +437,7 @@ export class SampleData {
             { type: "Area", dataKey: "uv", fill: "#0000ff", stroke: "#0000ff" }
           ],
           datasourceName: "ds2"
-
-        },
+        }
       }
     };
   }
@@ -395,8 +458,7 @@ export class SampleData {
           XAxis: "x",
           YAxis: "y",
           datasourceName: "ds3"
-
-        },
+        }
       }
     };
   }

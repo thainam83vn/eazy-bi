@@ -11,6 +11,7 @@ import { DesignBoard } from "./dashboard/board";
 import { DatasourceView } from "./database/datasource-view";
 import { WorkspaceMenu } from "./workspace-menu";
 import { ControlSelectMini } from "./controls/control-select-mini";
+import { ControlCheck } from "./controls/control-check";
 
 import { SampleData } from "./../sample-data";
 import { Datasource } from "./../models/datasource-model";
@@ -131,11 +132,8 @@ export class WorkSpace extends BaseComponent {
     return (
       <div style={styles.main}>
         <div style={styles.footer}>
-          <FlatButton
-            onClick={this.showHomeDialog.bind(this)}
-          >
-            Home
-          </FlatButton>
+          <ControlCheck attributes={{ value: true }} />
+
         </div>
 
         <div style={styles.body}>

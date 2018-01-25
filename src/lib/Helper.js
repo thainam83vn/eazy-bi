@@ -9,7 +9,7 @@ export class Helper {
     return o;
   }
 
-  static asArray(obj):[] {
+  static asArray(obj): [] {
     let r = [];
     for (let k in obj) {
       r.push(obj[k]);
@@ -22,6 +22,13 @@ export class Helper {
       r.push({ [keyField]: k, [valueField]: obj[k] });
     }
     return r;
+  }
+  static remove(array, value) {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] === value) {
+        array.slice(i, 1);
+      }
+    }
   }
   static predict(arr, predict) {
     let r = [];

@@ -2,18 +2,21 @@ import { BaseModel } from "./base-model";
 import { JsonHelper } from "./../base/json-helper";
 import { HttpService } from "./../services/http-service";
 import { EventEmitter } from "../base/event-emitter";
+import { Helper } from './../lib/Helper';
+
 
 export class Datasource extends BaseModel {
   onChange:EventEmitter = new EventEmitter();
 
   name: string;
   setting: any;
+  filters: any = {};
+  rawData: any;
   data = [];
 
   constructor(props) {
     super(props);
     this.toJson(data => {
-      this.data = data;
     });
   }
 
@@ -21,7 +24,8 @@ export class Datasource extends BaseModel {
     if (this.setting.type === "csv") {
       let csv = this.setting.fileContent;
       JsonHelper.csvtojson(csv, json => {
-        this.data = json;
+        this.rawData = json;
+        this.applyFilters();
         if (callback) callback(this.data);
         this.onChange.emit(this.data);
       });
@@ -55,11 +59,38 @@ export class Datasource extends BaseModel {
             header: header,
             rows: r
           };
-          this.data = data;
+          this.rawData = data;
+          this.applyFilters();
           if (callback) callback(data);
           this.onChange.emit(this.data);          
         });
     }
+  }
+
+  applyFilters(){
+    this.data = this.rawData;
+  }
+
+  updateFilter(field, v){
+    let filter = this.filters[field];
+    if (!filter) filter=[];
+    if (filter.indexOf(v)) {
+      Helper.remove(filter, v);
+    } else {
+      filter.push(v);
+    }
+    this.applyFilters();
+  }
+
+  
+
+  distinct(field){
+    let r = [];
+    this.data.rows.map(row=>{
+      if (r.indexOf(row[field])<0)
+        r.push(row[field]);
+    });
+    return r;
   }
 
   setSetting(pairs) {

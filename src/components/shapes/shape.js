@@ -15,6 +15,9 @@ export class Shape extends BaseComponent {
 
   isResizing = false;
   resizeCornor = 0;
+  mousedownX = 0;
+  mousedownY = 0;
+  isMouseDown = false;
 
   ovrDeclareStyle() {
     this.styleCollection.add("cursor", "default", null);
@@ -42,9 +45,6 @@ export class Shape extends BaseComponent {
 
     this.state = {
       isSelected: this.props.data.selected ? this.props.data.selected : false,
-      isMouseDown: false,
-      mousedownX: 0,
-      mousedownY: 0,
       style: this.styleCollection.output()
     };
   }
@@ -54,7 +54,7 @@ export class Shape extends BaseComponent {
     return {
       id: this.shapeId,
       type: this.shapeType,
-      style: style,
+      style: style
     };
   }
 
@@ -135,33 +135,32 @@ export class Shape extends BaseComponent {
   }
 
   select(v) {
-    this.setState({ isSelected: v });
-    if (v) {
-      if (this.props.onSelected) this.props.onSelected(this);
+    if (this.state.isSelected !== v) {
+      this.setState({ isSelected: v });
+      if (v) {
+        if (this.props.onSelected) this.props.onSelected(this);
+      }
     }
   }
 
   undrag() {
-    this.setState({ isMouseDown: false });
+    this.isMouseDown = false;
   }
 
   mousedown(e) {
     let nave = e.nativeEvent;
     this.target = nave.target;
-    this.setState({
-      isMouseDown: true,
-      mousedownX: nave.offsetX,
-      mousedownY: nave.offsetY
-    });
-    // this.select(nave.target === this.target);
+    this.isMouseDown = true;
 
+    this.mousedownX = nave.offsetX;
+    this.mousedownY = nave.offsetY;
     if (this.props.onDrag) this.props.onDrag(this);
   }
   mousemove(e) {
-    if (this.state.isMouseDown) {
+    if (this.isMouseDown) {
       let nave = e.nativeEvent;
-      let delX = nave.offsetX - this.state.mousedownX;
-      let delY = nave.offsetY - this.state.mousedownY;
+      let delX = nave.offsetX - this.mousedownX;
+      let delY = nave.offsetY - this.mousedownY;
       this.updateRect(
         this.state.style.left + delX,
         this.state.style.top + delY,
@@ -172,11 +171,16 @@ export class Shape extends BaseComponent {
   }
 
   mouseup(e) {
-    this.setState({ isMouseDown: false });
+    this.isMouseDown = false;
     if (this.props.onDrop) this.props.onDrop(this);
   }
 
   updateRect(x, y, w, h) {
+    if (
+      Math.abs(x - this.state.style.left <= 1) &&
+      Math.abs(y - this.state.style.top) <= 1
+    )
+      return;
     if (w <= 0) w = 2;
     if (h <= 0) h = 2;
     this.updateStyleValue("left", x);
@@ -201,10 +205,10 @@ export class Shape extends BaseComponent {
     let nave = e.nativeEvent;
 
     if (!this.isResizing) {
-      if (this.state.isMouseDown) {
+      if (this.isMouseDown) {
         if (!DomHelper.contains(this.target, nave.target)) {
-          let newx = nave.offsetX - this.state.mousedownX;
-          let newy = nave.offsetY - this.state.mousedownY;
+          let newx = nave.offsetX - this.mousedownX;
+          let newy = nave.offsetY - this.mousedownY;
           // console.log(`moveOutside(new):(${this.state.style.left},${this.state.style.top},${this.state.style.width},${this.state.style.height}) (${nave.clientX}, ${nave.clientY})`, nave);
           this.updateRect(
             newx,
@@ -234,45 +238,45 @@ export class Shape extends BaseComponent {
         y1 = ny;
       }
       if (this.resizeCornor === 2) {
-        if (nave.target.className==="dot2") {
-          x2 = nx+this.state.style.width;
-          y1 = ny
+        if (nave.target.className === "dot2") {
+          x2 = nx + this.state.style.width;
+          y1 = ny;
         } else {
           x2 = nx;
           y1 = ny;
         }
-        
       }
       if (this.resizeCornor === 3) {
-        if (nave.target.className==="dot3") {
-          x2 = nx+this.state.style.width;
-          y2 = ny+this.state.style.height;
+        if (nave.target.className === "dot3") {
+          x2 = nx + this.state.style.width;
+          y2 = ny + this.state.style.height;
         } else {
           x2 = nx;
-          y2 = ny;  
+          y2 = ny;
         }
       }
       if (this.resizeCornor === 4) {
-        if (nave.target.className==="dot4") {
+        if (nave.target.className === "dot4") {
           x1 = nx;
-          y2 = ny+this.state.style.height;
+          y2 = ny + this.state.style.height;
         } else {
           x1 = nx;
           y2 = ny;
         }
       }
-      console.log(`AdjustResize:${outside} (${nx - this.state.style.left},${ny - this.state.style.top}) (${nx},${ny}) ${nave.target.classList}`, nave);
+      console.log(
+        `AdjustResize:${outside} (${nx - this.state.style.left},${ny -
+          this.state.style.top}) (${nx},${ny}) ${nave.target.classList}`,
+        nave
+      );
       this.ovrAdjustResize(x1, y1, x2, y2);
     }
   }
 
   mouseupOutside(e) {
-    this.setState({ isMouseDown: false });
+    this.isMouseDown = false;
     this.isResizing = false;
     this.resizeCornor = 0;
-
-    let nave = e.nativeEvent;
-    // this.select(nave.target === this.target);
   }
 
   startResize(i) {
@@ -294,38 +298,40 @@ export class Shape extends BaseComponent {
     return (
       <div
         className="shape"
-        ref={element => this.target = element}
+        ref={element => (this.target = element)}
         style={this.state.style}
         onMouseDown={this.mousedown.bind(this)}
         onMouseUp={this.mouseup.bind(this)}
         onMouseMove={this.mousemove.bind(this)}
       >
         <div>
-          <div style={styles.inner}>
-            {this.ovrInner()}
-          </div>
+          <div style={styles.inner}>{this.ovrInner()}</div>
           {this.state.isSelected && (
             <div style={styles.selected}>
               {this.dots[0] && (
-                <div className="dot1"
+                <div
+                  className="dot1"
                   style={Helper.merge(styles.selectedDot, styles.dot1)}
                   onMouseDown={() => this.startResize(1)}
                 />
               )}
               {this.dots[1] && (
-                <div className="dot2"
+                <div
+                  className="dot2"
                   style={Helper.merge(styles.selectedDot, styles.dot2)}
                   onMouseDown={() => this.startResize(2)}
                 />
               )}
               {this.dots[2] && (
-                <div className="dot3"
+                <div
+                  className="dot3"
                   style={Helper.merge(styles.selectedDot, styles.dot3)}
                   onMouseDown={() => this.startResize(3)}
                 />
               )}
               {this.dots[3] && (
-                <div className="dot4"
+                <div
+                  className="dot4"
                   style={Helper.merge(styles.selectedDot, styles.dot4)}
                   onMouseDown={() => this.startResize(4)}
                 />
@@ -352,7 +358,7 @@ const styles = {
     cursor: "crosshair"
   },
   inner: {
-    overflow: 'hidden'
+    overflow: "hidden"
   },
   dot1: {
     top: -5,

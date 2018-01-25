@@ -5,7 +5,9 @@ export class BaseControl extends BaseComponent {
   constructor(props) {
     super(props);
     let value = null;
-    if (this.props.attributes) value = this.props.attributes.value;
+    if (this.props.attributes) 
+      value = this.props.attributes.value;
+    
     this.ovrUpdateValue(value);
   }
 
@@ -23,15 +25,17 @@ export class BaseControl extends BaseComponent {
     this.ovrUpdateValue(nextProps.attributes.value);
   }
 
-  valueChanged(value) {
+  valueChanged(v) {
     let cancel = false;
     if (this.props.onBeforeChange) {
-      cancel = this.props.onBeforeChange({ [this.props.attributes.name]: value });
+      cancel = this.props.onBeforeChange({ [this.props.attributes.name]: v });
     }
     if (!cancel) {
-      this.setState({ value: value }, () => {
+      this.setState((prevState, props)=>{
+        return { value: v};
+        }, () => {
         if (this.props.onChange)
-          this.props.onChange({ [this.props.attributes.name]: value });
+          this.props.onChange({ [this.props.attributes.name]: v });
       });
     }
   }

@@ -52,7 +52,7 @@ export class ChartShape extends Shape {
 
   refreshChart() {
     if (this.state.loading) {
-      if (this.state.isMouseDown) {
+      if (this.isMouseDown) {
         setTimeout(() => {
           this.refreshChart();
         }, 100);

@@ -63,6 +63,10 @@ export class MenuButtonChartTypes extends BaseComponent {
           primaryText="Scatter Chart"
           onClick={() => this.addShape(sample.addScatterChart())}
         />
+        <MenuItem
+          primaryText="Table"
+          onClick={() => this.addShape(sample.addTableChart())}
+        />
       </IconMenu>   
     );
   }

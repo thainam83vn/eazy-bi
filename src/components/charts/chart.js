@@ -14,20 +14,28 @@ export class BaseChart extends BaseComponent {
       this.props.attributes.datasourceName
     );
     this.proxyData.onChange.subcribe(d => {
-      this.setStateData();
+      this.ovrUpdateStateData();
     });
 
-    this.state = {
+    let stateValues = {
+      datasource: this.proxyData.data,
+      table: this.proxyData.data.data,
       data: this.proxyData.data.data.rows,
       attributes: this.attributes.output()
-    };
+    }
+    let extra = this.ovrExtraStateValue();
+    for(let k in extra){
+      stateValues[k] = extra[k];
+    }
+    this.state = stateValues;
   }
 
-  setStateData() {
+  ovrExtraStateValue() {
+    return {};
+  }
+
+  ovrUpdateStateData() {
     this.setState({ data: this.proxyData.data.data.rows });
-    // this.proxyData.data.toJson(data=>{
-    //   this.setState({data: data.rows});
-    // });
   }
 
   ovrDeclareAttributes() {
