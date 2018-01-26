@@ -1,25 +1,25 @@
-import React from 'react';
-import { render } from 'react-dom';
-import './style.css';
-import './css/font-awesome.css';
-import { Main } from './components/main';
-import { WorkSpace } from './components/workspace';
-import { TestProperty} from './components/test-property';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from "react";
+import { render } from "react-dom";
 
-import {DialogContainer} from './components/dialog-container';
+import { Provider } from "react-redux";
 
-const styles = {
-  fontFamily: 'sans-serif',
-  textAlign: 'center',
-  padding:"0px"
-};
+
+import "./style.css";
+import "./css/font-awesome.css";
+import Workspace from "./components/workspace";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { DialogContainer } from "./components/dialog-container";
+import {StoreService} from './reducers/index';
+
+let s = StoreService.ins();
 
 const App = () => (
-  <MuiThemeProvider>
-    <WorkSpace  />
-    <DialogContainer />
-  </MuiThemeProvider>
+  <Provider store={s}>
+    <MuiThemeProvider>
+      <Workspace />
+      <DialogContainer />
+    </MuiThemeProvider>
+  </Provider>
 );
 
-render(<App />, document.getElementById('root')); 
+render(<App />, document.getElementById("root"));

@@ -48,6 +48,21 @@ export class SlicerChart extends BaseChart {
     });
   }
 
+  itemChanged(v,e){
+    v.value = e[v.name];
+    console.log("Item changed:", v, e, this.state.values);
+    let filter = [];
+    for(let option of Helper.asArray(this.state.values)){
+      if(option.value){
+        filter.push(option.name);
+      }
+    }
+    let datasource = this.state.datasource;
+    datasource.updateFilter(this.state.attributes.field, filter);
+    if (this.props.onChange)
+      this.props.onChange(e);
+  }
+
   render() {
     console.log("render slicechart");
     if (this.state.table) {
@@ -58,8 +73,10 @@ export class SlicerChart extends BaseChart {
               <li>
                 <ControlCheck
                   attributes={{
+                    name:v.name,
                     value: v.value
                   }}
+                  onChange={(e)=>this.itemChanged(v,e)}
                 />
                 {v.name}
               </li>

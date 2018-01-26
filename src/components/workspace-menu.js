@@ -3,10 +3,7 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import {
   Card,
-  CardActions,
   CardHeader,
-  CardMedia,
-  CardTitle,
   CardText
 } from "material-ui/Card";
 import { Helper } from "./../lib/Helper";
@@ -90,9 +87,6 @@ export class WorkspaceMenu extends BaseComponent {
     let dashboards = this.props.workspace.dashboards;
     let items = [];
     for (let dashboard of Helper.asArray(dashboards)) {
-      // items.push(
-      //   <MenuItem value={dashboard.dashboardName} primaryText={dashboard.dashboardName}  />
-      // );
       items.push(
         <li
           style={{
@@ -127,9 +121,6 @@ export class WorkspaceMenu extends BaseComponent {
     let datasources = this.props.workspace.datasources;
     let items = [];
     for (let datasource of Helper.asArray(datasources)) {
-      // items.push(
-      //   <MenuItem value={dashboard.dashboardName} primaryText={dashboard.dashboardName}  />
-      // );
       items.push(
         <li
           style={{

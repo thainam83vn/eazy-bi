@@ -68,10 +68,19 @@ export class Datasource extends BaseModel {
   }
 
   applyFilters(){
+    // let r = [];
+    // for(let row of this.rawData){
+    //   let b = true;
+    //   for(let keyFilter in this.filters){
+    //     for(let v of this.filters[keyFilter]){
+
+    //     }
+    // }
     this.data = this.rawData;
   }
 
   updateFilter(field, v){
+    console.log("updateFilter", field, v);
     let filter = this.filters[field];
     if (!filter) filter=[];
     if (filter.indexOf(v)) {

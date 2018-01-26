@@ -1,8 +1,7 @@
 import React from "react";
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import FlatButton from "material-ui/FlatButton";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
 import SplitterLayout from "react-splitter-layout";
 
 import varStyles from "./../var-styles";
@@ -16,14 +15,10 @@ import { ControlCheck } from "./controls/control-check";
 import { SampleData } from "./../sample-data";
 import { Datasource } from "./../models/datasource-model";
 import { DatasourceService } from "./../services/datasource-service";
-import { ArrayHelper } from "../base/array-helper";
 import { DialogService } from "../services/dialog-service";
 import { Helper } from "../lib/Helper";
-import { ObjectHelper } from "../base/object-helper";
-import { ObjectExplorer } from "./object-explorer";
-import { EntityService } from "../services/entity-service";
 
-const StrDashboard = "Dashboard";
+import { DSWorkspace } from "./../reducers/ds-workspace";
 
 const styles = {
   main: {
@@ -55,7 +50,7 @@ const styles = {
 
 const sample = new SampleData();
 
-export class WorkSpace extends BaseComponent {
+class Workspace extends BaseComponent {
   state = {
     screen: "Design"
   };
@@ -65,17 +60,13 @@ export class WorkSpace extends BaseComponent {
     for (let ds of Helper.asArray(this.selectedWorkspace.datasources)) {
       DatasourceService.instance().getDatasource(ds.name, ds);
     }
-    // let entities = sample.entitiesSample();
-    // for (let key in entities) {
-    //   EntityService.instance().getEntity(key, entities[key]);
-    // }
+
+    DSWorkspace.ins();
 
     this.state = {
       selectedDashboard: null,
       selectedDatasource: null
     };
-
-    setTimeout(() => {}, 500);
   }
 
   selectDashboard(e) {
@@ -102,15 +93,42 @@ export class WorkSpace extends BaseComponent {
     }, 50);
   }
 
+  createWorkspace() {
+    DialogService.instance().prompt(
+      "Create Workspace",
+      "Workspace Name",
+      "",
+      r => {
+        return [];
+      },
+      r => {
+        if (r) {
+          let newWp = sample.workspaceSample1(r);
+          DSWorkspace.ins().create(newWp).then((data) => {
+            // this.props.actRefreshWorkspace();
+          });
+        }
+      }
+    );
+  }
+
+  activeWorkspace(wp) {
+    DSWorkspace.ins()
+      .setActive(wp)
+      .then(e => {
+        // this.props.actRefreshWorkspace();
+      });
+  }
+
   createDashboard(name) {
     let dashboard = sample.dashboardSample1(name);
-    this.selectedWorkspace.dashboards[name] = dashboard;
+    this.props.workspaces.active.dashboards[name] = dashboard;
     this.selectDashboard(dashboard);
   }
 
   createDatasource(name) {
     let datasource = new Datasource(sample.datasourceSampleCSV1(name));
-    this.selectedWorkspace.datasources[name] = datasource;
+    this.props.workspaces.active.datasources[name] = datasource;
     this.selectDatasource(datasource);
   }
 
@@ -120,12 +138,8 @@ export class WorkSpace extends BaseComponent {
 
   datasourceChanged(ds) {}
 
-  showHomeDialog(){
-    DialogService.instance().alert(
-      "Test",
-      "Go home",
-      () => { }
-    );
+  showHomeDialog() {
+    DialogService.instance().alert("Test", "Go home", () => {});
   }
 
   render() {
@@ -133,24 +147,43 @@ export class WorkSpace extends BaseComponent {
       <div style={styles.main}>
         <div style={styles.footer}>
           <ControlCheck attributes={{ value: true }} />
-
         </div>
 
         <div style={styles.body}>
           <SplitterLayout percentage="true" secondaryInitialSize="80">
             <div style={styles.left}>
-              <WorkspaceMenu
-                style={{
-                  background: varStyles.theme.colorMain,
-                  color: varStyles.theme.textColor,
-                  textSelectedColor: varStyles.theme.textSelectedColor
-                }}
-                workspace={this.selectedWorkspace}
-                onSelectDashboard={this.selectDashboard.bind(this)}
-                onSelectDatasource={this.selectDatasource.bind(this)}
-                onCreateDashboard={this.createDashboard.bind(this)}
-                onCreateDatasource={this.createDatasource.bind(this)}
-              />
+              <div>
+                <div>
+                  <span>Workspaces</span>
+                  <i
+                    className="material-icons button"
+                    onClick={this.createWorkspace.bind(this)}
+                  >
+                    add
+                  </i>
+                </div>
+                <ul>
+                  {this.props.workspaces.entities.map(wp => (
+                    <li onClick={() => this.activeWorkspace(wp)}>
+                      {wp.workspaceName}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {this.props.workspaces.active && (
+                <WorkspaceMenu
+                  style={{
+                    background: varStyles.theme.colorMain,
+                    color: varStyles.theme.textColor,
+                    textSelectedColor: varStyles.theme.textSelectedColor
+                  }}
+                  workspace={this.props.workspaces.active}
+                  onSelectDashboard={this.selectDashboard.bind(this)}
+                  onSelectDatasource={this.selectDatasource.bind(this)}
+                  onCreateDashboard={this.createDashboard.bind(this)}
+                  onCreateDatasource={this.createDatasource.bind(this)}
+                />
+              )}
             </div>
             <div style={styles.right}>
               {this.state.selectedDashboard && (
@@ -173,3 +206,11 @@ export class WorkSpace extends BaseComponent {
     );
   }
 }
+
+let mapStateToProps = state => {
+  return {
+    workspaces: state.workspaces,
+  };
+};
+
+export default connect(mapStateToProps)(Workspace);

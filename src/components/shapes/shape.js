@@ -149,12 +149,16 @@ export class Shape extends BaseComponent {
 
   mousedown(e) {
     let nave = e.nativeEvent;
-    this.target = nave.target;
-    this.isMouseDown = true;
+    console.log("mousedown", nave, nave.target);
 
-    this.mousedownX = nave.offsetX;
-    this.mousedownY = nave.offsetY;
-    if (this.props.onDrag) this.props.onDrag(this);
+    if (nave.target.className.indexOf("no-mousedown") < 0) {
+      this.target = nave.target;
+      this.isMouseDown = true;
+
+      this.mousedownX = nave.offsetX;
+      this.mousedownY = nave.offsetY;
+      if (this.props.onDrag) this.props.onDrag(this);
+    }
   }
   mousemove(e) {
     if (this.isMouseDown) {
@@ -294,6 +298,24 @@ export class Shape extends BaseComponent {
     };
   }
 
+  renderDots() {
+    if (this.state.isSelected) {
+      let dots = [];
+      for (let i = 0; i < 3; i++) {
+        if (this.dots[i])
+          dots.push(
+            <div
+              className={`dot${i}`}
+              style={Helper.merge(styles.selectedDot, styles[`dot${i + 1}`])}
+              onMouseDown={() => this.startResize(i + 1)}
+            />
+          );
+      }
+      return dots;
+    }
+    return null;
+  }
+
   render() {
     return (
       <div
@@ -306,38 +328,7 @@ export class Shape extends BaseComponent {
       >
         <div>
           <div style={styles.inner}>{this.ovrInner()}</div>
-          {this.state.isSelected && (
-            <div style={styles.selected}>
-              {this.dots[0] && (
-                <div
-                  className="dot1"
-                  style={Helper.merge(styles.selectedDot, styles.dot1)}
-                  onMouseDown={() => this.startResize(1)}
-                />
-              )}
-              {this.dots[1] && (
-                <div
-                  className="dot2"
-                  style={Helper.merge(styles.selectedDot, styles.dot2)}
-                  onMouseDown={() => this.startResize(2)}
-                />
-              )}
-              {this.dots[2] && (
-                <div
-                  className="dot3"
-                  style={Helper.merge(styles.selectedDot, styles.dot3)}
-                  onMouseDown={() => this.startResize(3)}
-                />
-              )}
-              {this.dots[3] && (
-                <div
-                  className="dot4"
-                  style={Helper.merge(styles.selectedDot, styles.dot4)}
-                  onMouseDown={() => this.startResize(4)}
-                />
-              )}
-            </div>
-          )}
+          {this.renderDots()}
         </div>
       </div>
     );
@@ -348,7 +339,9 @@ const styles = {
   selected: {
     position: "absolute",
     width: "100%",
-    height: "100%"
+    height: "100%",
+    background: "none",
+    zIndex: 0
   },
   selectedDot: {
     position: "absolute",
