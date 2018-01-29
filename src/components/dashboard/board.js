@@ -9,14 +9,13 @@ import { BaseComponent } from "./../base-component";
 import { ShapeDynamic } from "./../shapes/shape-dynamic";
 import { Shape } from "./../shapes/shape";
 import { SampleData } from "./../../sample-data";
-// import { ShapeProperty } from "./../shapes/shape-property";
-// import { ChartProperty } from "./../charts/chart-property";
 import { ProxyData } from "./../../base/proxy-data";
 
 import { PropertyView } from "./property-view";
 
 import { MenuButtonChartTypes } from "./menu-button-chart-types";
 import { ObjectHelper } from "../../base/object-helper";
+import { Helper } from "../../lib/Helper";
 
 const styles = {
   body: {
@@ -37,7 +36,7 @@ const styles = {
     background: varStyles.theme.colorLight
   },
   toolbar: {
-    height: "50px",
+    height: "30px",
     // paddingTop: "12px",
     background: varStyles.theme.colorMain
   },
@@ -116,6 +115,22 @@ export class DesignBoard extends BaseComponent {
     });
   }
 
+  propertyRemoved(shapeView){
+    console.log("propertyRemoved", shapeView);
+    this.list = Helper.removePredict(this.list, (e)=> e.id === shapeView.shapeId);
+    this.setState({ shapes: this.list });
+    if (shapeView.ovrDestroy)
+      shapeView.ovrDestroy();
+    // for (let i = 0; i < this.list.length;i++) {
+    //   let shape = this.list[i];
+    //   if (shapeView.shapeId === shape.id){
+    //     this.list.slice(i, 1);
+    //     this.setState({ shapes: this.list });
+    //     return;
+    //   } 
+    // }
+  }
+
   showPropertyShape() {
     let open = !this.state.openProperty;
     if (this.state.propertyMode !== 1) open = true;
@@ -174,6 +189,10 @@ export class DesignBoard extends BaseComponent {
 
   shapeViewAttrChanged(e) {
     console.log("ShapeView changed:", e, this.state.shapes);
+    if (e === this.selectedShapeView){
+      console.log("Update property view:", e);
+      
+    }
     for (let shape of this.state.shapes) {
       if (shape.id === e.shapeId) {
         shape.style = e.styleCollection.output();
@@ -186,6 +205,7 @@ export class DesignBoard extends BaseComponent {
     return (
       <ShapeDynamic
         key={shape.id}
+        id={shape.id}
         onInit={this.initShape.bind(this)}
         onDrag={this.dragShape.bind(this)}
         onDrop={this.dropShape.bind(this)}
@@ -211,31 +231,8 @@ export class DesignBoard extends BaseComponent {
           >
             {this.state.shapes.map(shape => this.renderShape(shape))}
           </div>
-          <PropertyView shapeView={this.state.selectedShapeView} onWidthChange={this.propertyWidthChanged.bind(this)}/>
+          <PropertyView shapeView={this.state.selectedShapeView} onWidthChange={this.propertyWidthChanged.bind(this)} onRemove={this.propertyRemoved.bind(this)}/>
         </div>
-        {
-          // <Drawer
-          //   open={this.state.openProperty}
-          //   docked={true}
-          //   openSecondary={true}
-          //   width={400}
-          // >
-          //   {this.state.selectedShapeView &&
-          //   this.state.propertyMode === 1 && (
-          //     <ShapeProperty
-          //       onInit={e => this.ovrInitChild("propShapeView", e)}
-          //     />
-          //   )}
-          //   {this.state.selectedShapeView &&
-          //   this.state.propertyMode === 2 && (
-          //     <ChartProperty
-          //       onInit={e => this.ovrInitChild("propChartView", e)}
-          //       onChange={this.chartPropertyChanged.bind(this)}
-          //     />
-          //   )}
-          // </Drawer>
-        }
-        {/* <div style={styles.footer}>{this.renderToolbar()}</div> */}
       </div>
     );
   }

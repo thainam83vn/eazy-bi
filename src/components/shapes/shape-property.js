@@ -20,6 +20,15 @@ export class ShapeProperty extends BaseComponent {
 
   constructor(props) {
     super(props);
+
+    let styles = {};
+    for (let key in this.props.data) {
+      if (StyleControlMapping[key]) 
+        styles[key] = this.props.data[key];
+    }
+    this.state = {
+      styles: styles
+    };
   }
   setShape(shape) {
     this.loading(true, () => {
@@ -55,7 +64,7 @@ export class ShapeProperty extends BaseComponent {
           <ControlForm
             onChange={this.valueChanged.bind(this)}
             declares={StyleControlMapping}
-            data={this.props.data}
+            data={this.state.styles}
           />
         </div>
       </div>

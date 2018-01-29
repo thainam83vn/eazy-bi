@@ -7,15 +7,31 @@ import { DatasourceService } from "./../../services/datasource-service";
 export class BaseChart extends BaseComponent {
   proxyData: ProxyData;
   attributes: AttributeCollection;
+
+  idChangeHandleHandle = null;
+
+  changeHandle = d => {
+    console.log("Datasource changed", d);
+    this.ovrUpdateStateData();
+  };
   constructor(props) {
     super(props);
-    this.ovrDeclareAttributes();
+    this.ovrDeclareAttributes();    
+    this.ovrInitState();
+  }
+
+  componentWillUnmount() {
+    this.proxyData.data.onChange.unsubcribe(this.idChangeHandleHandle);
+  }
+
+  ovrInitState(){
     this.proxyData = DatasourceService.instance().getDatasource(
       this.props.attributes.datasourceName
     );
-    this.proxyData.onChange.subcribe(d => {
-      this.ovrUpdateStateData();
-    });
+    // this.proxyData.onChange.subcribe(d => {
+    //   this.ovrUpdateStateData();
+    // });
+    this.idChangeHandleHandle = this.proxyData.data.onChange.subcribe(this.changeHandle);
 
     let stateValues = {
       datasource: this.proxyData.data,
@@ -24,7 +40,7 @@ export class BaseChart extends BaseComponent {
       attributes: this.attributes.output()
     }
     let extra = this.ovrExtraStateValue();
-    for(let k in extra){
+    for (let k in extra) {
       stateValues[k] = extra[k];
     }
     this.state = stateValues;
@@ -35,7 +51,11 @@ export class BaseChart extends BaseComponent {
   }
 
   ovrUpdateStateData() {
-    this.setState({ data: this.proxyData.data.data.rows });
+    console.log("ovrUpdateStateData " + this.props.type);
+    this.setState({
+      table: this.proxyData.data.data,
+      data: this.proxyData.data.data.rows
+    });
   }
 
   ovrDeclareAttributes() {

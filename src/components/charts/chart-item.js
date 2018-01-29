@@ -15,7 +15,6 @@ export class PanChartItem extends BaseComponent {
   }
 
   render() {
-    debugger
     let t = this.props.type;
     if (components.hasOwnProperty(t)) {
       let Component = components[t];

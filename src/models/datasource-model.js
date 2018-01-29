@@ -6,7 +6,7 @@ import { Helper } from './../lib/Helper';
 
 
 export class Datasource extends BaseModel {
-  onChange:EventEmitter = new EventEmitter();
+  onChange: EventEmitter = new EventEmitter();
 
   name: string;
   setting: any;
@@ -48,8 +48,8 @@ export class Datasource extends BaseModel {
               }
             }
           }
-          if (!r.length){
-            r=[r];
+          if (!r.length) {
+            r = [r];
           }
           let header = [];
           for (let k in r[0]) {
@@ -62,41 +62,55 @@ export class Datasource extends BaseModel {
           this.rawData = data;
           this.applyFilters();
           if (callback) callback(data);
-          this.onChange.emit(this.data);          
+          this.onChange.emit(this.data);
         });
     }
   }
 
-  applyFilters(){
-    // let r = [];
-    // for(let row of this.rawData){
-    //   let b = true;
-    //   for(let keyFilter in this.filters){
-    //     for(let v of this.filters[keyFilter]){
-
-    //     }
-    // }
-    this.data = this.rawData;
+  applyFilters() {
+    let result = [];
+    if (this.rawData) {
+      for (let row of this.rawData.rows) {
+        if (this.validateFilter(row)) {
+          result.push(row);
+        }
+      }
+    }
+    if (this.data.rows !== result) {
+      this.data = {
+        header: this.rawData.header,
+        rows:result
+      };
+      this.onChange.emit(this.data);
+    }
   }
 
-  updateFilter(field, v){
+  validateFilter(row) {
+    let b = true;
+    for (let key in this.filters) {
+      let {field, values} = this.filters[key];
+      if (values === null || values.length ===0)
+        continue;
+      let v = row[field];
+      b = b && values.indexOf(v)>=0;
+      if (!b) return false;
+    }
+    return b;
+  }
+
+  updateFilter(id, field, v) {
     console.log("updateFilter", field, v);
-    let filter = this.filters[field];
-    if (!filter) filter=[];
-    if (filter.indexOf(v)) {
-      Helper.remove(filter, v);
-    } else {
-      filter.push(v);
+    this.filters[id] = {
+      field: field,
+      values: v
     }
     this.applyFilters();
   }
 
-  
-
-  distinct(field){
+  distinct(field) {
     let r = [];
-    this.data.rows.map(row=>{
-      if (r.indexOf(row[field])<0)
+    this.rawData.rows.map(row => {
+      if (r.indexOf(row[field]) < 0)
         r.push(row[field]);
     });
     return r;

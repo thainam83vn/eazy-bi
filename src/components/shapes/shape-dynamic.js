@@ -20,7 +20,8 @@ export class ShapeDynamic extends React.Component {
     let shape = this.props.shape;
     if (components.hasOwnProperty(shape.type)) {
       let Component = components[shape.type];
-      return <Component key={shape.id}
+      return <Component 
+        id={this.props.id}
         onInit={this.initShape.bind(this)}
         onDrag={this.dragShape.bind(this)}
         onDrop={this.dropShape.bind(this)}

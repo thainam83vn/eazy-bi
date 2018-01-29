@@ -2,13 +2,19 @@ import React from "react";
 import { BaseChart } from "./chart";
 import { ControlCheck } from "./../controls/control-check";
 import { Helper } from "./../../lib/Helper";
+import { DatasourceService } from "../../services/datasource-service";
 
 export class SlicerChart extends BaseChart {
-  constructor(props){
+  constructor(props) {
     super(props);
-    setTimeout(()=>{
+    this.state = {
+      attributes: this.props.attributes,
+      values: null,
+
+    };
+    setTimeout(() => {
       this.ovrUpdateStateData();
-    }, 100);
+    }, 50);
   }
   declares() {
     return {
@@ -25,58 +31,83 @@ export class SlicerChart extends BaseChart {
     // this.forceUpdate();
   }
 
-  ovrExtraStateValue() {
-    return {values: []};
+  ovrInitState() {
+    //override chart's method
   }
 
-  ovrUpdateStateData(){
-    super.ovrUpdateStateData();
+  ovrExtraStateValue() {
+    return { values: [] };
+  }
+
+  ovrUpdateStateData() {
+    // super.ovrUpdateStateData();
+    this.proxyData = DatasourceService.instance().getDatasource(
+      this.props.attributes.datasourceName
+    );
+
     let field = this.state.attributes.field;
-    let datasource = this.state.datasource;
-    let filter = datasource.filters[field];
-    if (!filter) filter = [];
-    let options = datasource.distinct(this.state.attributes.field);
-    let values = {};
-    for(let option of options){
-      values[option] = {
-        name:option,
-        value:false
+    let datasource = this.proxyData.data;
+    let id = this.props.id;
+    if (!datasource.filters[id])
+      datasource.updateFilter(id, field, []);
+    let oldField = datasource.filters[id].field;
+    let filterValues = datasource.filters[id].values;
+    if (oldField !== field) {
+      datasource.updateFilter(id, field, []);
+      // datasource.filters[id] = {field:field, values:[]};
+    }
+
+    let names = datasource.distinct(this.state.attributes.field);
+    let options = {};
+    for (let name of names) {
+      let v = filterValues.indexOf(name) >= 0;
+      options[name] = {
+        name: name,
+        value: v
       };
     }
     this.setState({
-      values:values
+      values: options
     });
   }
 
-  itemChanged(v,e){
+  ovrDestroy() {
+    let field = this.state.attributes.field;
+    let datasource = this.proxyData.data;
+    let id = this.props.id;
+    datasource.updateFilter(id, field, []);
+  }
+
+  itemChanged(v, e) {
+    let id = this.props.id;
     v.value = e[v.name];
     console.log("Item changed:", v, e, this.state.values);
     let filter = [];
-    for(let option of Helper.asArray(this.state.values)){
-      if(option.value){
+    for (let option of Helper.asArray(this.state.values)) {
+      if (option.value) {
         filter.push(option.name);
       }
     }
-    let datasource = this.state.datasource;
-    datasource.updateFilter(this.state.attributes.field, filter);
+    let datasource = this.proxyData.data;
+    datasource.updateFilter(id, this.state.attributes.field, filter);
     if (this.props.onChange)
       this.props.onChange(e);
   }
 
   render() {
     console.log("render slicechart");
-    if (this.state.table) {
+    if (this.state.values) {
       return (
         <div style={{ width: this.props.width, height: this.props.height }}>
           <ul>
             {Helper.asArray(this.state.values).map(v => (
-              <li>
+              <li key={v.name}>
                 <ControlCheck
                   attributes={{
-                    name:v.name,
+                    name: v.name,
                     value: v.value
                   }}
-                  onChange={(e)=>this.itemChanged(v,e)}
+                  onChange={(e) => this.itemChanged(v, e)}
                 />
                 {v.name}
               </li>

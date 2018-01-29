@@ -9,7 +9,7 @@ const styles = {
     position: "absolute",
     top: 0,
     left: 0,
-    overflow: "hidden"
+    overflow: "auto"
   }
 };
 
@@ -77,6 +77,7 @@ export class ChartShape extends Shape {
         {this.state.loading && <span>moving...</span>}
         {!this.state.loading && (
           <ChartDynamic
+            id={this.props.id}
             onInit={(e)=>{this.ovrInitChild("chartView", e)}}
             type={this.chartData.type}
             chart={this.chartData}

@@ -23,6 +23,7 @@ export class DSWorkspace {
       sample.workspaceSample1("workspace 1"),
       sample.workspaceSample1("workspace 2")
     ];
+    this.active = this.entities[0];
     this.dispatchStore();
   }
 

@@ -32,7 +32,7 @@ export class MenuButtonChartTypes extends BaseComponent {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem
+        {/* <MenuItem
           primaryText="Rectangle"
           onClick={() => this.addShape(sample.addRect())}
         />
@@ -41,7 +41,7 @@ export class MenuButtonChartTypes extends BaseComponent {
           onClick={() => this.addShape(sample.addCircle())}
         />
         <MenuItem primaryText="Icon" />
-        <MenuItem primaryText="Text" />
+        <MenuItem primaryText="Text" /> */}
 
         <MenuItem
           primaryText="Line Chart"
@@ -66,6 +66,10 @@ export class MenuButtonChartTypes extends BaseComponent {
         <MenuItem
           primaryText="Table"
           onClick={() => this.addShape(sample.addTableChart())}
+        />
+        <MenuItem
+          primaryText="Slicer"
+          onClick={() => this.addShape(sample.addSlicerChart())}
         />
       </IconMenu>   
     );

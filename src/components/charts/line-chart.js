@@ -26,6 +26,7 @@ export class PanLineChart extends BaseChart {
     };
   }
   render() {
+    console.log("LineChart render", this.state.table);
     return (
       <LineChart
         width={this.props.width}

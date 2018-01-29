@@ -1,11 +1,18 @@
-export class EventEmitter{
-  listeners = [];
-  subcribe(handle){
-    this.listeners.push(handle);
+export class EventEmitter {
+  nextId = 0;
+  listeners = {};
+  subcribe(handle) {
+    this.listeners[this.nextId] = handle;
+    let id = this.nextId;
+    this.nextId++;
+    return id;
   }
-  emit(data){
-    for(let listener of this.listeners){
-      listener(data);
+  unsubcribe(id) {
+    delete this.listeners[id];
+  }
+  emit(data) {
+    for (let id in this.listeners) {
+      this.listeners[id](data);
     }
   }
 }

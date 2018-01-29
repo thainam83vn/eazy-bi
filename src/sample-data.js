@@ -129,9 +129,33 @@ export class SampleData {
         }
       })
     });
+    let item3 = new DashboardItemModel({
+      id: 3,
+      type: "ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 500,
+        height: 250,
+        left: 300,
+        top: 0
+      },
+      inner: new EntityModel({
+        name: "BarChart1",
+        type: "PanBarChart",
+        attributes: {
+          XAxis: "name",
+          YAxis: [
+            { dataKey: "uv", fill: "#ff0000" },
+            { dataKey: "pv", fill: "#00ff00" }
+          ],
+          datasourceName: "ds2"
+        }
+      })
+    });
     return new DashboardModel({
       dashboardName: name,
-      items: [item1, item2]
+      items: [item1, item2, item3]
     });
   }
 
@@ -336,6 +360,27 @@ export class SampleData {
         type: "TableChart",
         attributes: {
           datasourceName: "ds2"
+        }
+      }
+    };
+  }
+
+  addSlicerChart() {
+    return {
+      type: "ChartShape",
+      style: {
+        background: "#3d3d3d",
+        color: "#afafaf",
+        width: 250,
+        height: 250,
+        left: 0,
+        top: 0
+      },
+      inner: {
+        type: "SlicerChart",
+        attributes: {
+          datasourceName: "ds2",
+          field: "name"
         }
       }
     };

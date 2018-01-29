@@ -9,15 +9,17 @@ import "./css/font-awesome.css";
 import Workspace from "./components/workspace";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { DialogContainer } from "./components/dialog-container";
-import {StoreService} from './reducers/index';
+import { StoreService } from './reducers/index';
 
 let s = StoreService.ins();
 
 const App = () => (
   <Provider store={s}>
     <MuiThemeProvider>
-      <Workspace />
-      <DialogContainer />
+      <div>
+        <Workspace />
+        <DialogContainer />
+      </div>
     </MuiThemeProvider>
   </Provider>
 );

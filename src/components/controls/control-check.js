@@ -10,7 +10,7 @@ export class ControlCheck extends BaseControl {
   render() {
     console.log("Checkbox render");
     return (
-      <i class="material-icons no-mousedown" onClick={this.vc.bind(this)}>
+      <i className="material-icons no-mousedown" onClick={this.vc.bind(this)}>
         {this.state.value ? "check_box" : "check_box_outline_blank"}
       </i>
     );

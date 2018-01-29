@@ -8,6 +8,7 @@ import { DomHelper } from "../../base/dom-helper";
 export class Shape extends BaseComponent {
   shapeId = null;
   shapeType = null;
+  inner = null;
 
   dots = [true, true, true, true];
   styleCollection: ShapeStyleCollection = new ShapeStyleCollection();
@@ -70,6 +71,11 @@ export class Shape extends BaseComponent {
     return null;
   }
 
+  ovrDestroy() {
+    if (this.chartView)
+      this.chartView.ovrDestroy();
+  }
+
   ovrRectChanged() {
     if (this.props.onRectChange) this.props.onRectChange(this);
   }
@@ -77,25 +83,31 @@ export class Shape extends BaseComponent {
   ovrAdjustResize(x1, y1, x2, y2) {
     if (this.resizeCornor === 1) {
       if (x1 > x2 - 1) {
+        console.log("cornor 1x",x1,x2);        
         x1 = x2 - 1;
       }
       if (y1 > y2 - 1) {
+        console.log("cornor 1y",y1,y2);                
         y1 = y2 - 1;
       }
     }
     if (this.resizeCornor === 2) {
       if (x2 < x1 + 1) {
+        console.log("cornor 2x",x1,x2);        
         x2 = x1 + 1;
       }
       if (y1 > y2 - 1) {
+        console.log("cornor 2y",y1,y2);                
         y1 = y2 - 1;
       }
     }
     if (this.resizeCornor === 3) {
       if (x2 < x1 + 1) {
+        console.log("cornor 3x",x1,x2);
         x2 = x1 + 1;
       }
       if (y2 < y1 + 1) {
+        console.log("cornor 3y",y1,y2);
         y2 = y1 + 1;
       }
     }
@@ -104,6 +116,7 @@ export class Shape extends BaseComponent {
         x1 = x2 - 1;
       }
       if (y2 < y1) {
+        console.log("cornor 4y",y1,y2);        
         y2 = y1 + 1;
       }
     }
@@ -126,6 +139,8 @@ export class Shape extends BaseComponent {
 
   updateStyleValue(name, value) {
     this.styleCollection.update(name, value);
+    console.log("shape updateStyleValue", name, value, this.styleCollection);
+    
   }
 
   refreshStyle() {
@@ -149,22 +164,23 @@ export class Shape extends BaseComponent {
 
   mousedown(e) {
     let nave = e.nativeEvent;
-    console.log("mousedown", nave, nave.target);
-
-    if (nave.target.className.indexOf("no-mousedown") < 0) {
+    // console.log("mousedown", nave, nave.target, nave.target.className);
+    let className = nave.target.className + "";
+    if (className.indexOf("no-mousedown") < 0) {
       this.target = nave.target;
       this.isMouseDown = true;
 
-      this.mousedownX = nave.offsetX;
-      this.mousedownY = nave.offsetY;
+      this.mousedownX = nave.layerX;
+      this.mousedownY = nave.layerY;
       if (this.props.onDrag) this.props.onDrag(this);
     }
   }
   mousemove(e) {
     if (this.isMouseDown) {
       let nave = e.nativeEvent;
-      let delX = nave.offsetX - this.mousedownX;
-      let delY = nave.offsetY - this.mousedownY;
+      let delX = nave.layerX - this.mousedownX;
+      let delY = nave.layerY - this.mousedownY;
+      // console.log(`mousemove:(${nave.offsetX}, ${nave.offsetY})`, nave)
       this.updateRect(
         this.state.style.left + delX,
         this.state.style.top + delY,
@@ -180,13 +196,17 @@ export class Shape extends BaseComponent {
   }
 
   updateRect(x, y, w, h) {
-    if (
-      Math.abs(x - this.state.style.left <= 1) &&
-      Math.abs(y - this.state.style.top) <= 1
-    )
-      return;
+    // if (
+    //   Math.abs(x - this.state.style.left <= 1) &&
+    //   Math.abs(y - this.state.style.top) <= 1 &&
+    //   Math.abs(w - this.state.style.width) <= 1 &&
+    //   Math.abs(h - this.state.style.height) <= 1 
+    // )
+    //   return;
+
     if (w <= 0) w = 2;
     if (h <= 0) h = 2;
+    console.log("updateRect:", x, y, w, h);    
     this.updateStyleValue("left", x);
     this.updateStyleValue("top", y);
     this.updateStyleValue("width", w);
@@ -207,13 +227,36 @@ export class Shape extends BaseComponent {
   }
   mousemoveOutside(e) {
     let nave = e.nativeEvent;
+    let className = nave.target.className + "";
+
+    let dotX = 0;
+    let dotY = 0;
+    // if (className.indexOf("dot1") >= 0){
+    //   console.log("dot1", nave.layerX, nave.layerY);
+    //   dotX = 0;
+    //   dotY = 0;
+    // } 
+    // if (className.indexOf("dot2") >= 0){
+    //   console.log("dot2", nave.layerX, nave.layerY);
+    //   dotX = this.state.style.width;
+    //   dotY = 0;
+    // } 
+    // if (className.indexOf("dot3") >= 0){
+    //   console.log("dot3", nave.layerX, nave.layerY);
+    //   dotX = this.state.style.width;
+    //   dotY = this.state.style.height;
+    // } 
+    // if (className.indexOf("dot4") >= 0){
+    //   console.log("dot4", nave.layerX, nave.layerY);
+    //   dotX = 0;
+    //   dotY = this.state.style.height;      
+    // } 
 
     if (!this.isResizing) {
       if (this.isMouseDown) {
         if (!DomHelper.contains(this.target, nave.target)) {
           let newx = nave.offsetX - this.mousedownX;
           let newy = nave.offsetY - this.mousedownY;
-          // console.log(`moveOutside(new):(${this.state.style.left},${this.state.style.top},${this.state.style.width},${this.state.style.height}) (${nave.clientX}, ${nave.clientY})`, nave);
           this.updateRect(
             newx,
             newy,
@@ -223,15 +266,17 @@ export class Shape extends BaseComponent {
         }
       }
     } else {
+      // console.log("mousemoveOutside", nave);
+
       let nx = 0;
       let ny = 0;
       let outside = !DomHelper.contains(this.target, nave.target);
       if (outside) {
-        nx = nave.offsetX;
-        ny = nave.offsetY;
+        nx = nave.layerX;
+        ny = nave.layerY;
       } else {
-        nx = this.state.style.left + nave.offsetX;
-        ny = this.state.style.top + nave.offsetY;
+        nx = this.state.style.left + nave.layerX + dotX;
+        ny = this.state.style.top + nave.layerY + dotY;
       }
       let x1 = this.state.style.left;
       let y1 = this.state.style.top;
@@ -268,11 +313,10 @@ export class Shape extends BaseComponent {
           y2 = ny;
         }
       }
-      console.log(
-        `AdjustResize:${outside} (${nx - this.state.style.left},${ny -
-          this.state.style.top}) (${nx},${ny}) ${nave.target.classList}`,
-        nave
-      );
+      // console.log(
+      //   `AdjustResize:${outside} (${nx - this.state.style.left},${ny - this.state.style.top}) (${nx},${ny}) ${nave.target.classList}`,
+      //   nave
+      // );
       this.ovrAdjustResize(x1, y1, x2, y2);
     }
   }
@@ -286,7 +330,7 @@ export class Shape extends BaseComponent {
   startResize(i) {
     this.isResizing = true;
     this.resizeCornor = i;
-    console.log("start resize", this.resizeCornor);
+    // console.log("start resize", this.resizeCornor);
   }
 
   getRect() {
@@ -301,14 +345,14 @@ export class Shape extends BaseComponent {
   renderDots() {
     if (this.state.isSelected) {
       let dots = [];
-      for (let i = 0; i < 3; i++) {
-        if (this.dots[i])
+      for (let i = 1; i <= 4; i++) {
+        if (this.dots[i - 1])
           dots.push(
             <div
-              className={`dot${i}`}
-              style={Helper.merge(styles.selectedDot, styles[`dot${i + 1}`])}
-              onMouseDown={() => this.startResize(i + 1)}
-            />
+              className={"dot"+i}
+              style={Helper.merge(styles.selectedDot, styles["dot"+i])}
+              onMouseDown={() => this.startResize(i)}
+            ></div>
           );
       }
       return dots;
@@ -317,6 +361,7 @@ export class Shape extends BaseComponent {
   }
 
   render() {
+    console.log("shape render:", this.state.style);
     return (
       <div
         className="shape"

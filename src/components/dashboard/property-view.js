@@ -7,6 +7,7 @@ import { BaseComponent } from "./../base-component";
 import { ChartProperty } from "./../charts/chart-property";
 import { ShapeProperty } from "./../shapes/shape-property";
 import { ObjectHelper } from "./../../base/object-helper";
+import { DialogService } from "../../services/dialog-service";
 
 const styles = {
   main: {
@@ -37,9 +38,26 @@ export class PropertyView extends BaseComponent {
     if (this.state.tabIndex !== i) this.setState({ tabIndex: i });
   }
 
+  remove(){
+    DialogService.instance().confirm("Remove Item", "Are you sure to remove it?", (r)=>{
+      if (r){
+        if (this.props.onRemove)
+          this.props.onRemove(this.props.shapeView);
+      }
+    });
+  }
+
   setShapeView(shapeView) {
-    if (this.state.shapeView !== shapeView)
-      this.setState({ shapeView: shapeView });
+    // this.setState({show: true, shapeView: shapeView });
+    
+    if (this.state.shapeView !== shapeView){
+      this.setState({show: false}, ()=>{
+        setTimeout(()=>{
+          this.setState({show: true, shapeView: shapeView });
+        }, 1);
+      });
+      
+    }
   }
 
   shapePropertyChanged(e) {
@@ -82,6 +100,8 @@ export class PropertyView extends BaseComponent {
             onChange={this.chartPropertyChanged.bind(this)}
           />
           );
+      } else {
+        view = <div></div>;
       }
       return (
         <div>
@@ -103,12 +123,24 @@ export class PropertyView extends BaseComponent {
               style={ObjectHelper.merge(styles.button, {
                 color:
                   this.state.tabIndex === 2
-                    ? varStyles.theme.textSelectedColor
-                    : varStyles.theme.textColor
+                  ? varStyles.theme.textSelectedColor
+                  : varStyles.theme.textColor
               })}
               onClick={() => this.selectTab(2)}
             >
               mode_edit
+          </i>
+          <i
+              className="material-icons"
+              style={ObjectHelper.merge(styles.button, {
+                color:
+                  this.state.tabIndex === 2
+                  ? varStyles.theme.textColor
+                  : varStyles.theme.textSelectedColor
+              })}
+              onClick={() => this.remove()}
+            >
+              delete_forever
           </i>
           </div>
           {view}

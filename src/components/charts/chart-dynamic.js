@@ -12,6 +12,8 @@ export class ChartDynamic extends React.Component {
       let Component = components[t];
       return (
         <Component
+          id={this.props.id}
+          type={this.props.type}
           onInit={this.initChart.bind(this)}
           attributes={this.props.chart.attributes}
           width={this.props.width}

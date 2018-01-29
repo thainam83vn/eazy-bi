@@ -88,7 +88,7 @@ export class WorkspaceMenu extends BaseComponent {
     let items = [];
     for (let dashboard of Helper.asArray(dashboards)) {
       items.push(
-        <li
+        <li key={dashboard.dashboardName}
           style={{
             color:
               this.state.selected === dashboard
@@ -122,7 +122,7 @@ export class WorkspaceMenu extends BaseComponent {
     let items = [];
     for (let datasource of Helper.asArray(datasources)) {
       items.push(
-        <li
+        <li key={datasource.name}
           style={{
             color:
               this.state.selected === datasource
@@ -164,7 +164,7 @@ export class WorkspaceMenu extends BaseComponent {
           showExpandableButton={true}
           titleStyle={{ color: this.props.style.color }}
         />
-        <CardText expandable={true} style={{ color: "#fff" }}>
+        <CardText expandable={true} expanded={true} style={{ color: "#fff" }}>
           {this.renderDashboards()}
           {this.renderDatasources()}
         </CardText>

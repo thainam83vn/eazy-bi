@@ -23,18 +23,24 @@ export class Helper {
     }
     return r;
   }
-  static remove(array, value) {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] === value) {
-        array.slice(i, 1);
-      }
-    }
-  }
+
   static predict(arr, predict) {
     let r = [];
     for (let o of arr) {
       if (predict(o)) r.push(o);
     }
     return r;
+  }
+  static removePredict(array, predict) {
+    let result = [];
+    for (let i = 0; i < array.length; i++) {
+      if (!predict(array[i])) {
+        result.push(array[i]);
+      }
+    }
+    return result;
+  }
+  static remove(array, value) {
+    return this.removePredict(array, e=>e===value);
   }
 }
