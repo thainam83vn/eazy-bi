@@ -11,16 +11,18 @@ export class JsonHelper {
         if (!header) {
           header = csvRow;
         } else {
-          let obj = {};
-          for (let i = 0; i < csvRow.length; i++) {
-            obj[header[i]] = isNaN(csvRow[i])?csvRow[i]:parseFloat(csvRow[i]);
+          if (csvRow.length >= header.length) {
+            let obj = {};
+            for (let i = 0; i < csvRow.length; i++) {
+              obj[header[i]] = isNaN(csvRow[i]) ? csvRow[i] : parseFloat(csvRow[i]);
+            }
+            rows.push(obj);
           }
-          rows.push(obj);
         }
       })
       .on("done", () => {
         if (header) {
-          header.splice(0, 0, "index");
+          header=[...header,'index'];
           for (let i = 0; i < rows.length; i++) {
             rows[i].index = i + 1;
           }

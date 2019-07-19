@@ -20,8 +20,14 @@ const styles = {
 export class WorkspaceMenu extends BaseComponent {
   constructor(props) {
     super(props);
+    let selected = null;
+    if (this.props.workspace){
+      let dashboards = Object.values(this.props.workspace.dashboards);
+      selected = dashboards.length>0&&dashboards[0];
+    }
+      
     this.state = {
-      selected: null
+      selected: selected
     };
   }
 
@@ -153,7 +159,7 @@ export class WorkspaceMenu extends BaseComponent {
 
   render() {
     return (
-      <Card style={{ background: this.props.style.background }}>
+      <Card style={{ background: this.props.style.background }} expanded={true}>
         <CardHeader
           title={
             <div style={{ whiteSpace: "nowrap" }}>

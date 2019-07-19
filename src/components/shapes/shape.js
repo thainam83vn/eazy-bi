@@ -72,7 +72,7 @@ export class Shape extends BaseComponent {
   }
 
   ovrDestroy() {
-    if (this.chartView)
+    if (this.chartView && this.chartView.ovrDestroy)
       this.chartView.ovrDestroy();
   }
 

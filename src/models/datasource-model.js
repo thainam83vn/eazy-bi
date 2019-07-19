@@ -12,7 +12,10 @@ export class Datasource extends BaseModel {
   setting: any;
   filters: any = {};
   rawData: any;
-  data = [];
+  data = {
+    header:[],
+    rows:[]
+  };
 
   constructor(props) {
     super(props);

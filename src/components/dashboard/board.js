@@ -119,7 +119,7 @@ export class DesignBoard extends BaseComponent {
     console.log("propertyRemoved", shapeView);
     this.list = Helper.removePredict(this.list, (e)=> e.id === shapeView.shapeId);
     this.setState({ shapes: this.list });
-    if (shapeView.ovrDestroy)
+    if (typeof shapeView.ovrDestroy === 'function')
       shapeView.ovrDestroy();
     // for (let i = 0; i < this.list.length;i++) {
     //   let shape = this.list[i];

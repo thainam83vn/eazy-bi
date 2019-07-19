@@ -1,13 +1,13 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
-
+// import {
+//   Table,
+//   TableBody,
+//   TableHeader,
+//   TableHeaderColumn,
+//   TableRow,
+//   TableRowColumn
+// } from "material-ui/Table";
+import HotTable from 'react-handsontable';
 import { BaseComponent } from "./../base-component";
 import { Datasource } from "./../../models/datasource-model";
 export class DatasourceData extends BaseComponent {
@@ -17,7 +17,10 @@ export class DatasourceData extends BaseComponent {
     this.state = {
       table: null
     };
-    this.refresh(props.datasource);
+  }
+
+  componentDidMount(){
+    this.refresh(this.props.datasource);
   }
 
   refresh(ds) {
@@ -41,25 +44,31 @@ export class DatasourceData extends BaseComponent {
   }
   render() {
     if (this.state.table) {
+      let data = [
+        this.state.table.header,
+        ...this.state.table.rows.map(r=>Object.values(r))
+      ]
+      console.log("datasource-data", this.state.table,data);      
       return (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {this.state.table.header.map(h => (
-                <TableHeaderColumn key={h}>{h}</TableHeaderColumn>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {this.state.table.rows.map(r => (
-              <TableRow key={r.index}>
-                {this.state.table.header.map(h => (
-                  <TableRowColumn key={h + r.index}>{typeof r[h]==="object"?JSON.stringify(r[h]):r[h]}</TableRowColumn>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <HotTable root="hot" data={data}  colHeaders={false} settings={{fixedRowsTop:1}} rowHeaders={true} width="600" height="300" stretchH="all" />
+        // <Table>
+        //   <TableHeader>
+        //     <TableRow>
+        //       {this.state.table.header.map(h => (
+        //         <TableHeaderColumn key={h}>{h}</TableHeaderColumn>
+        //       ))}
+        //     </TableRow>
+        //   </TableHeader>
+        //   <TableBody>
+        //     {this.state.table.rows.map(r => (
+        //       <TableRow key={r.index}>
+        //         {this.state.table.header.map(h => (
+        //           <TableRowColumn key={h + r.index}>{typeof r[h]==="object"?JSON.stringify(r[h]):r[h]}</TableRowColumn>
+        //         ))}
+        //       </TableRow>
+        //     ))}
+        //   </TableBody>
+        // </Table>
       );
     }
     return null;

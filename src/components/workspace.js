@@ -69,7 +69,7 @@ class Workspace extends BaseComponent {
     
     this.state = {
       selectedDashboard: null,
-      selectedDatasource: null
+      selectedDatasource: null,
     };
   }
   componentWillReceiveProps(nextProps){

@@ -45,8 +45,8 @@ export class SampleData {
   }
   workspaceSample1(name): WorkspaceModel {
     let dashboards = {
+      dashboard2: new this.dashboardSample2("dashboard2"),      
       dashboard1: new this.dashboardSample1("dashboard1"),
-      dashboard2: new this.dashboardSample2("dashboard2")
     };
     let datasources = {
       ds1: new Datasource(this.datasourceSampleCSV1("ds1")),
