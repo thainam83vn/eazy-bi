@@ -4,6 +4,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 10
+      docker: 18
     commands:
       - echo Installing Mocha...
       - npm install -g mocha
