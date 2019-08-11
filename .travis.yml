@@ -1,0 +1,6 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build . -t thainam83vn/eazy_bi_client -f Dockerfile.dev

@@ -1,28 +1,28 @@
-import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import './workspace.css';
 
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 
-import SplitterLayout from "react-splitter-layout";
+import SplitterLayout from 'react-splitter-layout';
 
-import varStyles from "./../var-styles";
-import { BaseComponent } from "./base-component";
-import { DesignBoard } from "./dashboard/board";
-import { DatasourceView } from "./database/datasource-view";
-import { WorkspaceMenu } from "./workspace-menu";
-import { ControlSelectMini } from "./controls/control-select-mini";
-import { ControlCheck } from "./controls/control-check";
+import varStyles from './../var-styles';
+import { BaseComponent } from './base-component';
+import { DesignBoard } from './dashboard/board';
+import { DatasourceView } from './database/datasource-view';
+import { WorkspaceMenu } from './workspace-menu';
+import { ControlSelectMini } from './controls/control-select-mini';
+import { ControlCheck } from './controls/control-check';
 
-import { SampleData } from "./../sample-data";
-import { Datasource } from "./../models/datasource-model";
-import { DatasourceService } from "./../services/datasource-service";
-import { DialogService } from "../services/dialog-service";
-import { Helper } from "../lib/Helper";
+import { SampleData } from './../sample-data';
+import { Datasource } from './../models/datasource-model';
+import { DatasourceService } from './../services/datasource-service';
+import { DialogService } from '../services/dialog-service';
+import { Helper } from '../lib/Helper';
 
-import { DSWorkspace } from "./../reducers/ds-workspace";
+import { DSWorkspace } from './../reducers/ds-workspace';
 
 // const styles = {
 //   main: {
@@ -56,9 +56,9 @@ const sample = new SampleData();
 
 class Workspace extends BaseComponent {
   state = {
-    screen: "Design"
+    screen: 'Design'
   };
-  selectedWorkspace = sample.workspaceSample1("Workspace 1");
+  selectedWorkspace = sample.workspaceSample1('Workspace 1');
   constructor(props) {
     super(props);
     for (let ds of Helper.asArray(this.selectedWorkspace.datasources)) {
@@ -66,21 +66,27 @@ class Workspace extends BaseComponent {
     }
 
     DSWorkspace.ins();
-    
+
     this.state = {
       selectedDashboard: null,
-      selectedDatasource: null,
+      selectedDatasource: null
     };
   }
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     let selectedDashboard = null;
-    if (!this.selectedDashboard&&nextProps.workspaces&&nextProps.workspaces.active){
-      let arrDashboards = Helper.asArray(nextProps.workspaces.active.dashboards);
-      if (arrDashboards.length > 0){
+    if (
+      !this.selectedDashboard &&
+      nextProps.workspaces &&
+      nextProps.workspaces.active
+    ) {
+      let arrDashboards = Helper.asArray(
+        nextProps.workspaces.active.dashboards
+      );
+      if (arrDashboards.length > 0) {
         selectedDashboard = arrDashboards[0];
         this.state = {
-          selectedDashboard: selectedDashboard,
-        };    
+          selectedDashboard: selectedDashboard
+        };
       }
     }
   }
@@ -111,18 +117,20 @@ class Workspace extends BaseComponent {
 
   createWorkspace() {
     DialogService.instance().prompt(
-      "Create Workspace",
-      "Workspace Name",
-      "",
+      'Create Workspace',
+      'Workspace Name',
+      '',
       r => {
         return [];
       },
       r => {
         if (r) {
           let newWp = sample.workspaceSample1(r);
-          DSWorkspace.ins().create(newWp).then((data) => {
-            // this.props.actRefreshWorkspace();
-          });
+          DSWorkspace.ins()
+            .create(newWp)
+            .then(data => {
+              // this.props.actRefreshWorkspace();
+            });
         }
       }
     );
@@ -149,53 +157,61 @@ class Workspace extends BaseComponent {
   }
 
   boardChanged(dashboard) {
-    console.log("BoardChanged:", this.dashboards, dashboard);
+    console.log('BoardChanged:', this.dashboards, dashboard);
   }
 
-  datasourceChanged(ds) { }
+  datasourceChanged(ds) {}
 
   render() {
     return (
-      <div className="main">
-        <div className="footer">
+      <div className='main'>
+        <div className='footer'>
           {/* <ControlCheck attributes={{ value: true }} /> */}
-          <div className="logo">Eazy BI</div>
+          <div className='logo'>Welcome Eazy BI</div>
         </div>
 
-        <div className="body">
+        <div className='body'>
           <SplitterLayout percentage={true} secondaryInitialSize={80}>
-            <div className="left">
-              <div className="workspace-dropdown">
+            <div className='left'>
+              <div className='workspace-dropdown'>
                 <IconMenu
                   iconButtonElement={
                     <div>
-                      <span >{this.props.workspaces.active ? this.props.workspaces.active.workspaceName : "Select Workspace"}</span>
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
+                      <span>
+                        {this.props.workspaces.active
+                          ? this.props.workspaces.active.workspaceName
+                          : 'Select Workspace'}
+                      </span>
+                      <i className='fa fa-angle-right' aria-hidden='true' />
                     </div>
                   }
-                  anchorOrigin={{ horizontal: "left", vertical: "top" }}
-                  targetOrigin={{ horizontal: "right", vertical: "top" }}
+                  anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+                  targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                 >
                   {this.props.workspaces.entities.map(wp => (
-                    <MenuItem key={wp.workspaceName} onClick={() => this.activeWorkspace(wp)}
+                    <MenuItem
+                      key={wp.workspaceName}
+                      onClick={() => this.activeWorkspace(wp)}
                       primaryText={
-                        <div className="workspace-dropdown-item"><span>{wp.workspaceName}</span>
-                          {this.props.workspaces.active === wp && <i class="fa fa-check" aria-hidden="true"></i>
-
-                          }
+                        <div className='workspace-dropdown-item'>
+                          <span>{wp.workspaceName}</span>
+                          {this.props.workspaces.active === wp && (
+                            <i class='fa fa-check' aria-hidden='true' />
+                          )}
                         </div>
                       }
                     />
                   ))}
-                  <MenuItem key="CREATE_WORKSPACE" onClick={() => this.createWorkspace()}
-                      primaryText={
-                        <div className="workspace-dropdown-item"><span>Create Workspace</span>
-                          {<i class="fa fa-add" aria-hidden="true"></i>
-
-                          }
-                        </div>
-                      }
-                    />
+                  <MenuItem
+                    key='CREATE_WORKSPACE'
+                    onClick={() => this.createWorkspace()}
+                    primaryText={
+                      <div className='workspace-dropdown-item'>
+                        <span>Create Workspace</span>
+                        {<i class='fa fa-add' aria-hidden='true' />}
+                      </div>
+                    }
+                  />
                 </IconMenu>
               </div>
               {this.props.workspaces.active && (
@@ -213,10 +229,10 @@ class Workspace extends BaseComponent {
                 />
               )}
             </div>
-            <div className="right">
+            <div className='right'>
               {this.state.selectedDashboard && (
                 <DesignBoard
-                  onInit={e => this.ovrInitChild("viewDesign", e)}
+                  onInit={e => this.ovrInitChild('viewDesign', e)}
                   dashboard={this.state.selectedDashboard}
                   onChange={this.boardChanged.bind(this)}
                 />
@@ -237,7 +253,7 @@ class Workspace extends BaseComponent {
 
 let mapStateToProps = state => {
   return {
-    workspaces: state.workspaces,
+    workspaces: state.workspaces
   };
 };
 
