@@ -167,7 +167,7 @@ class Workspace extends BaseComponent {
       <div className='main'>
         <div className='footer'>
           {/* <ControlCheck attributes={{ value: true }} /> */}
-          <div className='logo'>Welcome Eazy BI</div>
+          <div className='logo'>Eazy BI powered by Thai</div>
         </div>
 
         <div className='body'>
