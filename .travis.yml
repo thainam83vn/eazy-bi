@@ -9,7 +9,7 @@ script:
   - docker run thainam83vn/eazy_bi_client npm run test -- --coverage
 
 deploy:
-  provider: elasticbeantalk
+  provider: elasticbeanstalk
   region: us-east-1
   app: 'docker'
   env: 'Docker-env'
