@@ -4,3 +4,6 @@ services:
 
 before_install:
   - docker build . -t thainam83vn/eazy_bi_client -f Dockerfile.dev
+
+script:
+  - docker run thainam83vn/eazy_bi_client npm run test -- --coverage
