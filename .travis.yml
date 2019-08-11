@@ -7,3 +7,13 @@ before_install:
 
 script:
   - docker run thainam83vn/eazy_bi_client npm run test -- --coverage
+
+deploy:
+  provider: elasticbeantalk
+  region: us-east-1
+  app: 'docker'
+  env: 'Docker-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-793085127332'
+  bucket_path: 'docker'
+  on:
+    branch: master
