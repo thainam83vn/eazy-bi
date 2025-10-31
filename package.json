@@ -4,7 +4,7 @@
   "version": "0.0.116",
   "dependencies": {
     "components": "0.1.0",
-    "csvtojson": "^1.1.9",
+    "csvtojson": "^2.0.13",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-color": "^2.13.8",
